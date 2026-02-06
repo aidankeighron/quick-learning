@@ -80,13 +80,26 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
             const pyodide = await loadPyodide();
             if (!pyodide) throw new Error("Failed to load Python environment.");
 
+            // Load sqlite3 if not already loaded
+            try {
+               await pyodide.loadPackage("sqlite3");
+            } catch (e) {
+               console.warn("sqlite3 might already be loaded", e);
+            }
+
+            // Pass query securely via globals
+            pyodide.globals.set("user_query", codeToRun);
+
             // Capture stdout
             pyodide.setStdout({ batched: (msg: string) => { result += msg + "\n"; } });
 
             const seedScript = `
 import sqlite3
 
-def run_sql(query):
+def run_sql():
+    # Retrieve query from globals (user_query is injected via pyodide.globals.set)
+    query = user_query
+    
     con = sqlite3.connect(":memory:")
     cur = con.cursor()
     
@@ -118,24 +131,30 @@ def run_sql(query):
         cur.execute(query)
         
         if query.strip().upper().startswith("SELECT") or query.strip().upper().startswith("WITH"):
-            col_names = [description[0] for description in cur.description]
-            rows = cur.fetchall()
-            
-            # Formatted Output
-            # Calculate column widths
-            widths = [len(c) for c in col_names]
-            for row in rows:
-                for i, val in enumerate(row):
-                    widths[i] = max(widths[i], len(str(val)))
-            
-            # Print Header
-            header = " | ".join(f"{col:<{w}}" for col, w in zip(col_names, widths))
-            print(header)
-            print("-" * len(header))
-            
-            # Print Rows
-            for row in rows:
-                print(" | ".join(f"{str(val):<{w}}" for val, w in zip(row, widths)))
+            if cur.description:
+                col_names = [description[0] for description in cur.description]
+                rows = cur.fetchall()
+                
+                # Formatted Output
+                if not rows:
+                    print("No results found.")
+                else:
+                    # Calculate column widths
+                    widths = [len(str(c)) for c in col_names]
+                    for row in rows:
+                        for i, val in enumerate(row):
+                            widths[i] = max(widths[i], len(str(val)))
+                    
+                    # Print Header
+                    header = " | ".join(f"{str(col):<{w}}" for col, w in zip(col_names, widths))
+                    print(header)
+                    print("-" * len(header))
+                    
+                    # Print Rows
+                    for row in rows:
+                        print(" | ".join(f"{str(val):<{w}}" for val, w in zip(row, widths)))
+            else:
+                print("Query executed, but no results returned.")
                 
         else:
              print(f"Query executed successfully.")
@@ -147,7 +166,7 @@ def run_sql(query):
     finally:
         con.close()
 
-run_sql("""${codeToRun.replace(/"/g, '\\"')}""")
+run_sql()
 `;
             
             await pyodide.runPythonAsync(seedScript);
