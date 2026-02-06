@@ -185,10 +185,27 @@ export function QuizRunner({ quiz }: QuizRunnerProps) {
         >
           <Card className="border-2">
             <CardHeader>
-              <CardTitle className="text-xl md:text-2xl">{currentQuestion.title}</CardTitle>
-              <CardDescription className="text-base md:text-lg mt-2 text-foreground/80">
-                {currentQuestion.description}
-              </CardDescription>
+              <div className="flex justify-between items-start">
+                  <div className="space-y-1">
+                      <CardTitle className="text-xl md:text-2xl">{currentQuestion.title}</CardTitle>
+                      <CardDescription className="text-base md:text-lg mt-2 text-foreground/80">
+                        {currentQuestion.description}
+                      </CardDescription>
+                  </div>
+                  {currentQuestion.learnMoreUrl && (
+                      <a 
+                        href={currentQuestion.learnMoreUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        title="Learn More"
+                      >
+                          <Button variant="outline" size="sm" className="gap-2 shrink-0">
+                               <div className="h-4 w-4">📖</div>
+                               <span className="hidden sm:inline">Learn More</span>
+                          </Button>
+                      </a>
+                  )}
+              </div>
             </CardHeader>
             <CardContent className="space-y-4">
               {currentQuestion.type === "code" ? (
