@@ -30,7 +30,9 @@ const sectionColors: Record<string, string> = {
 };
 
 export default function Home() {
-  const sections = getSections();
+  const sections = getSections().filter(section => 
+    section.id !== 'java' && section.id !== 'cpp'
+  );
 
   return (
     <main className="min-h-screen bg-background font-sans">
