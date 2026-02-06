@@ -17,52 +17,55 @@ type QuizRunnerProps = {
 export function QuizRunner({ quiz }: QuizRunnerProps) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptionIndex, setSelectedOptionIndex] = useState<number | null>(null);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'correct' | 'incorrect'>('idle');
   const [score, setScore] = useState({ correct: 0, wrong: 0, skipped: 0 });
   const [history, setHistory] = useState<boolean[]>([]);
   const [codeOutput, setCodeOutput] = useState("");
-  const [isCorrectState, setIsCorrectState] = useState(false);
+  const [hasAttempted, setHasAttempted] = useState(false);
 
   const currentQuestion = quiz.questions[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === quiz.questions.length - 1;
   const isFinished = currentQuestionIndex >= quiz.questions.length;
+  const isLocked = status === 'correct';
 
   const handleOptionSelect = (index: number) => {
-    if (isSubmitted) return;
+    if (isLocked) return;
     setSelectedOptionIndex(index);
+    setStatus('idle');
   };
 
-  const handleSubmit = () => {
+  const onCodeOutputChange = (output: string) => {
+    setCodeOutput(output);
+    setStatus('idle');
+  };
+
+  const handleCheck = () => {
+    let isCorrect = false;
+
     if (currentQuestion.type === "code") {
         if (!codeOutput) return;
         const expected = (currentQuestion.expectedOutput || "").trim();
         const actual = codeOutput.trim();
-        
-        // Simple exact match check for now, can be improved
-        const isCorrect = actual === expected || (expected === "Hello" && actual.includes("Hello"));
-
-        setIsSubmitted(true);
-        setIsCorrectState(isCorrect);
-        
-        if (isCorrect) {
-          setScore(prev => ({ ...prev, correct: prev.correct + 1 }));
-          setHistory(prev => [...prev, true]);
-        } else {
-          setScore(prev => ({ ...prev, wrong: prev.wrong + 1 }));
-          setHistory(prev => [...prev, false]);
-        }
+        // Simple exact match check, can be improved
+        isCorrect = actual === expected || (expected === "Hello" && actual.includes("Hello"));
     } else {
         if (selectedOptionIndex === null) return;
-        setIsSubmitted(true);
-        const isCorrect = currentQuestion.options![selectedOptionIndex].isCorrect;
-        setIsCorrectState(isCorrect);
-        
-        if (isCorrect) {
-            setScore(prev => ({ ...prev, correct: prev.correct + 1 }));
-            setHistory(prev => [...prev, true]);
-        } else {
-            setScore(prev => ({ ...prev, wrong: prev.wrong + 1 }));
-            setHistory(prev => [...prev, false]);
+        isCorrect = currentQuestion.options![selectedOptionIndex].isCorrect;
+    }
+
+    if (isCorrect) {
+        setStatus('correct');
+        if (!hasAttempted) {
+             setScore(prev => ({ ...prev, correct: prev.correct + 1 }));
+             setHistory(prev => [...prev, true]);
+             setHasAttempted(true);
+        }
+    } else {
+        setStatus('incorrect');
+        if (!hasAttempted) {
+             setScore(prev => ({ ...prev, wrong: prev.wrong + 1 }));
+             setHistory(prev => [...prev, false]);
+             setHasAttempted(true);
         }
     }
   };
@@ -70,25 +73,25 @@ export function QuizRunner({ quiz }: QuizRunnerProps) {
   const handleSkip = () => {
     setScore(prev => ({ ...prev, skipped: prev.skipped + 1 }));
     setHistory(prev => [...prev, false]);
-    handleNext();
+    handleNextQuestion();
   };
 
-  const handleNext = () => {
+  const handleNextQuestion = () => {
     setSelectedOptionIndex(null);
     setCodeOutput("");
-    setIsSubmitted(false);
-    setIsCorrectState(false);
+    setStatus('idle');
+    setHasAttempted(false);
     setCurrentQuestionIndex(prev => prev + 1);
   };
 
   const handleRestart = () => {
     setCurrentQuestionIndex(0);
     setSelectedOptionIndex(null);
-    setIsSubmitted(false);
+    setStatus('idle');
     setCodeOutput("");
-    setIsCorrectState(false);
     setScore({ correct: 0, wrong: 0, skipped: 0 });
     setHistory([]);
+    setHasAttempted(false);
   };
 
   if (isFinished) {
@@ -166,7 +169,7 @@ export function QuizRunner({ quiz }: QuizRunnerProps) {
                  <div className="space-y-4">
                     <CodeRunner 
                        language={currentQuestion.language || "javascript"} 
-                       onOutput={setCodeOutput} 
+                       onOutput={onCodeOutputChange} 
                     />
                  </div>
               ) : (
@@ -180,15 +183,19 @@ export function QuizRunner({ quiz }: QuizRunnerProps) {
                      optionClass += " border-muted";
                   }
 
-                  if (isSubmitted && isSelected) {
-                      if (option.isCorrect) {
-                          optionClass += " border-green-500 bg-green-500/10";
-                      } else {
-                          optionClass += " border-red-500 bg-red-500/10";
-                      }
+                  // Show error if selected and incorrect status
+                  if (status === 'incorrect' && isSelected) {
+                      optionClass += " border-red-500 bg-red-500/10";
                   }
                   
-                  if (isSubmitted && option.isCorrect && !isSelected) {
+                  // Show success if correct status
+                  if (status === 'correct' && isSelected) {
+                      optionClass += " border-green-500 bg-green-500/10";
+                  }
+
+                   // If correct, highlight the right one if not selected (optional, but good for review)
+                  // For now, only if locked and this is the correct one:
+                  if (isLocked && option.isCorrect && !isSelected) {
                        optionClass += " border-green-500 border-dashed opacity-70";
                   }
 
@@ -200,8 +207,8 @@ export function QuizRunner({ quiz }: QuizRunnerProps) {
                     >
                       <div className="flex items-center justify-between">
                          <span className="font-medium">{option.text}</span>
-                         {isSubmitted && isSelected && option.isCorrect && <CheckCircle2 className="text-green-500" />}
-                         {isSubmitted && isSelected && !option.isCorrect && <XCircle className="text-red-500" />}
+                         {status === 'correct' && isSelected && <CheckCircle2 className="text-green-500" />}
+                         {status === 'incorrect' && isSelected && <XCircle className="text-red-500" />}
                       </div>
                     </div>
                   );
@@ -212,28 +219,64 @@ export function QuizRunner({ quiz }: QuizRunnerProps) {
                <Button 
                 variant="ghost" 
                 onClick={handleSkip}
-                disabled={isSubmitted}
+                disabled={isLocked}
                 className="text-muted-foreground hover:text-foreground"
                >
                  Skip Question <SkipForward className="ml-2 h-4 w-4" />
                </Button>
+              
+               <div className="flex gap-2">
+                 {/* Check Answer Button - Visible if not correct */}
+                 {status !== 'correct' && (
+                    <Button 
+                      onClick={handleCheck} 
+                      disabled={(currentQuestion.type === 'code' ? !codeOutput : selectedOptionIndex === null)}
+                    >
+                      Check Answer
+                    </Button>
+                 )}
 
-               {!isSubmitted ? (
-                 <Button onClick={handleSubmit} disabled={(currentQuestion.type === 'code' ? !codeOutput : selectedOptionIndex === null)}>
-                   Submit Answer
-                 </Button>
-               ) : (
-                 <Button onClick={handleNext}>
-                   {isLastQuestion ? "Finish Quiz" : "Next Question"} <ArrowRight className="ml-2 h-4 w-4" />
-                 </Button>
-               )}
+                 {/* Next/Finish Logic */}
+                 {/* If correct, show Next or Finish */}
+                 {status === 'correct' && (
+                     <Button onClick={isLastQuestion ? handleNextQuestion : handleNextQuestion}>
+                        {isLastQuestion ? "Finish Quiz" : "Next Question"} <ArrowRight className="ml-2 h-4 w-4" />
+                     </Button>
+                 )}
+
+                 {/* Special Case for Last Question: Show Finish separately if we want to allow finishing without checking? 
+                     User said: "on the last question there should be a seprate button to submit and to check your answer"
+                     If I haven't checked yet, I see Check Answer.
+                     Should I also see "Finish Quiz" (Submit)?
+                     Maybe "Finish Quiz" submits whatever is there and ends? 
+                     Let's add "Finish Quiz" button for Last Question if status is NOT correct, 
+                     but maybe distinct from Check?
+                  */}
+                  {isLastQuestion && status !== 'correct' && (
+                      <Button 
+                        variant="secondary"
+                        onClick={() => {
+                             // If they click finish without checking, we might want to check for them or just end?
+                             // Let's assume it checks + ends.
+                             handleCheck();
+                             // If we want to force end:
+                             setTimeout(handleNextQuestion, 0); 
+                             // Wait, this is risky if state update is async.
+                             // Better: separate Finish logic.
+                             // Actually user might mean: "Check" tells me if I'm right. "Finish" accepts my fate.
+                        }}
+                      >
+                         Finish Quiz <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                  )}
+               </div>
             </CardFooter>
           </Card>
         </motion.div>
       </AnimatePresence>
       
       <AnimatePresence>
-        {isSubmitted && (
+        {status !== 'idle' && (
          <motion.div
            initial={{ opacity: 0, y: 10 }}
            animate={{ opacity: 1, y: 0 }}
@@ -241,16 +284,16 @@ export function QuizRunner({ quiz }: QuizRunnerProps) {
          >
            <Card className={cn(
              "border-l-4", 
-             isCorrectState
+             status === 'correct'
                ? "border-l-green-500 bg-green-500/5" 
                : "border-l-red-500 bg-red-500/5"
            )}>
              <CardContent className="p-6">
                <h4 className={cn(
                  "font-semibold mb-2 flex items-center",
-                 isCorrectState ? "text-green-700 dark:text-green-400" : "text-red-700 dark:text-red-400"
+                 status === 'correct' ? "text-green-700 dark:text-green-400" : "text-red-700 dark:text-red-400"
                )}>
-                 {isCorrectState ? (
+                 {status === 'correct' ? (
                    <><CheckCircle2 className="mr-2 h-5 w-5" /> Correct!</>
                  ) : (
                    <><XCircle className="mr-2 h-5 w-5" /> Incorrect</>
@@ -258,10 +301,10 @@ export function QuizRunner({ quiz }: QuizRunnerProps) {
                </h4>
                <p className="text-foreground/90 leading-relaxed">
                   {currentQuestion.type === "code" 
-                     ? (isCorrectState ? "Great job! Output matched." : `Expected: ${currentQuestion.expectedOutput}`)
-                     : (isCorrectState 
+                     ? (status === 'correct' ? "Great job! Output matched." : `Expected: ${currentQuestion.expectedOutput}`)
+                     : (status === 'correct'
                          ? currentQuestion.explanation 
-                         : currentQuestion.hint || "Try again!") // For multiple choice
+                         : currentQuestion.hint || "Try again!") 
                    }
                </p>
              </CardContent>
