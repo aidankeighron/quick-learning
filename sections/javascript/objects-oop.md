@@ -32,8 +32,8 @@ Create an object named `car` with properties `brand` set to "Toyota" and `year` 
 // const car = ...
 > Verification Code:
 if (typeof car !== 'object') throw new Error("car is not an object");
-if (car.brand !== "Toyota") throw new Error("Expected brand to be Toyota");
-if (car.year !== 2020) throw new Error("Expected year to be 2020");
+if (car.brand !== "Toyota") throw new Error(`Expected brand to be Toyota, got '${car.brand}'`);
+if (car.year !== 2020) throw new Error(`Expected year to be 2020, got ${car.year}`);
 console.log("Correct!");
 > Expected Output: Correct!
 
@@ -49,7 +49,7 @@ const car = {
 };
 > Verification Code:
 if (typeof car.honk !== 'function') throw new Error("honk is not a function");
-if (car.honk() !== "Beep!") throw new Error("Expected honk() to return 'Beep!'");
+if (car.honk() !== "Beep!") throw new Error(`Expected honk() to return 'Beep!', got '${car.honk()}'`);
 console.log("Correct!");
 > Expected Output: Correct!
 
@@ -82,7 +82,7 @@ class Person {
 }
 > Verification Code:
 const p = new Person("Dave");
-if (p.name !== "Dave") throw new Error("Constructor did not set name correctly");
+if (p.name !== "Dave") throw new Error(`Constructor did not set name correctly. Expected 'Dave', got '${p.name}'`);
 console.log("Correct!");
 > Expected Output: Correct!
 
@@ -98,7 +98,7 @@ class Person {
 }
 > Verification Code:
 const p = new Person("Eve");
-if (p.sayHello() !== "Hello, I am Eve") throw new Error("Incorrect greeting");
+if (p.sayHello() !== "Hello, I am Eve") throw new Error(`Incorrect greeting. Expected 'Hello, I am Eve', got '${p.sayHello()}'`);
 console.log("Correct!");
 > Expected Output: Correct!
 
@@ -118,8 +118,8 @@ class Student extends Person {
 }
 > Verification Code:
 const s = new Student("Frank", "A");
-if (s.name !== "Frank") throw new Error("Resulting object missing properties from Parent");
-if (s.grade !== "A") throw new Error("Resulting object missing new property");
+if (s.name !== "Frank") throw new Error(`Resulting object missing properties from Parent. Expected 'Frank', got '${s.name}'`);
+if (s.grade !== "A") throw new Error(`Resulting object missing new property. Expected 'A', got '${s.grade}'`);
 console.log("Correct!");
 > Expected Output: Correct!
 
@@ -133,7 +133,7 @@ class Person {
     // static method
 }
 > Verification Code:
-if (Person.species() !== "Homo Sapiens") throw new Error("Expected Person.species() to return 'Homo Sapiens'");
+if (Person.species() !== "Homo Sapiens") throw new Error(`Expected Person.species() to return 'Homo Sapiens', got '${Person.species()}'`);
 try {
  const p = new Person(); p.species(); 
  throw new Error("Should be static, not instance method");

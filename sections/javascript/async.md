@@ -34,7 +34,7 @@ const p = new Promise((resolve, reject) => {
 });
 > Verification Code:
 p.then(val => {
-    if (val !== "Success") throw new Error("Expected 'Success'");
+    if (val !== "Success") throw new Error(`Expected 'Success', got '${val}'`);
     console.log("Correct!");
 }).catch(e => {
     throw new Error("Promise rejected");
@@ -90,7 +90,7 @@ Write an `async` function `getData` that returns "Loaded".
 > Verification Code:
 if (getData().constructor.name !== "Promise") throw new Error("Must return a Promise (use async)");
 getData().then(val => {
-    if (val !== "Loaded") throw new Error("Expected 'Loaded'");
+    if (val !== "Loaded") throw new Error(`Expected 'Loaded', got '${val}'`);
     console.log("Correct!");
 });
 > Expected Output: Correct!
@@ -109,7 +109,7 @@ async function run() {
 }
 > Verification Code:
 run().then(val => {
-    if (val !== "Done") throw new Error("Expected 'Done'");
+    if (val !== "Done") throw new Error(`Expected 'Done', got '${val}'`);
     console.log("Correct!");
 });
 > Expected Output: Correct!
@@ -126,7 +126,7 @@ async function safeRun() {
 function fail() { return Promise.reject("Error"); }
 > Verification Code:
 safeRun().then(val => {
-    if (val !== "Caught") throw new Error("Expected to catch error and return 'Caught'");
+    if (val !== "Caught") throw new Error(`Expected to catch error and return 'Caught', got '${val}'`);
     console.log("Correct!");
 });
 > Expected Output: Correct!
@@ -146,7 +146,7 @@ async function getAll() {
 > Verification Code:
 getAll().then(vals => {
     if (!Array.isArray(vals)) throw new Error("Expected array");
-    if (vals[0] !== 1 || vals[1] !== 2) throw new Error("Expected [1, 2]");
+    if (vals[0] !== 1 || vals[1] !== 2) throw new Error(`Expected [1, 2], got [${vals}]`);
     console.log("Correct!");
 });
 > Expected Output: Correct!

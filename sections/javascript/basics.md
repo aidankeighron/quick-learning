@@ -97,7 +97,7 @@ Convert the function below into an arrow function named `add` that returns the s
 // const add = ...
 > Verification Code:
 if (typeof add !== 'function') throw new Error("add is not defined");
-if (add(2, 3) !== 5) throw new Error("Expected add(2, 3) to be 5");
+if (add(2, 3) !== 5) throw new Error(`Expected add(2, 3) to be 5, got ${add(2, 3)}`);
 // Basic check for arrow syntax isn't easily possible without parsing code string, 
 // but we verify functionality.
 console.log("Correct!");
@@ -126,8 +126,8 @@ function checkSign(n) {
     // Your code here
 }
 > Verification Code:
-if (checkSign(10) !== "Positive") throw new Error("Failed for positive number");
-if (checkSign(-5) !== "Negative") throw new Error("Failed for negative number");
-if (checkSign(0) !== "Zero") throw new Error("Failed for zero");
+if (checkSign(10) !== "Positive") throw new Error(`Expected 'Positive' for 10, got '${checkSign(10)}'`);
+if (checkSign(-5) !== "Negative") throw new Error(`Expected 'Negative' for -5, got '${checkSign(-5)}'`);
+if (checkSign(0) !== "Zero") throw new Error(`Expected 'Zero' for 0, got '${checkSign(0)}'`);
 console.log("Correct!");
 > Expected Output: Correct!

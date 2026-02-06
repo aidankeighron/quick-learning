@@ -33,7 +33,7 @@ Create an array named `colors` containing the strings "red", "green", and "blue"
 > Verification Code:
 if (!Array.isArray(colors)) throw new Error("colors is not an array");
 if (colors.length !== 3) throw new Error("Expected 3 elements");
-if (colors[0] !== "red" || colors[1] !== "green" || colors[2] !== "blue") throw new Error("Incorrect values");
+if (colors[0] !== "red" || colors[1] !== "green" || colors[2] !== "blue") throw new Error(`Expected ["red", "green", "blue"], got [${colors}]`);
 console.log("Correct!");
 > Expected Output: Correct!
 
@@ -47,7 +47,7 @@ const colors = ["red", "green", "blue"];
 // Add "yellow"
 > Verification Code:
 if (colors.length !== 4) throw new Error("Expected 4 elements");
-if (colors[3] !== "yellow") throw new Error("Expected last element to be 'yellow'");
+if (colors[3] !== "yellow") throw new Error(`Expected last element to be 'yellow', got '${colors[3]}'`);
 console.log("Correct!");
 > Expected Output: Correct!
 
@@ -79,7 +79,7 @@ const nums = [1, 2, 3];
 const doubled = ...
 > Verification Code:
 if (!doubled) throw new Error("doubled is not defined");
-if (doubled[0] !== 2 || doubled[1] !== 4 || doubled[2] !== 6) throw new Error("Incorrect values");
+if (doubled[0] !== 2 || doubled[1] !== 4 || doubled[2] !== 6) throw new Error(`Expected [2, 4, 6], got [${doubled}]`);
 console.log("Correct!");
 > Expected Output: Correct!
 
@@ -94,7 +94,7 @@ const evens = ...
 > Verification Code:
 if (!evens) throw new Error("evens is not defined");
 if (evens.length !== 3) throw new Error("Expected 3 even numbers");
-if (evens[0] !== 2 || evens[1] !== 4 || evens[2] !== 6) throw new Error("Expected [2, 4, 6]");
+if (evens[0] !== 2 || evens[1] !== 4 || evens[2] !== 6) throw new Error(`Expected [2, 4, 6], got [${evens}]`);
 console.log("Correct!");
 > Expected Output: Correct!
 
