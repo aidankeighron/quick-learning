@@ -1,5 +1,4 @@
 ---
-title: "Python: Basic to Advanced"
-description: "Cover concepts like Neural Networks, variables, and magic methods."
-order: 1
+title: "Advanced Python"
+description: "Master Python's advanced features including OOP, Decorators, and Magic Methods."
 ---
