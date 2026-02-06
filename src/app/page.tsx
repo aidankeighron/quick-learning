@@ -8,7 +8,7 @@ import {
   CardDescription,
   CardContent,
 } from "@/components/ui/card";
-import { Code2, Database, FileJson, Terminal, Coffee, Cog } from "lucide-react";
+import { Code2, Database, FileJson, Terminal } from "lucide-react";
 
 // Icon mapping for sections
 const sectionIcons: Record<string, any> = {
@@ -16,8 +16,6 @@ const sectionIcons: Record<string, any> = {
   sql: Database,
   javascript: FileJson,
   typescript: Terminal,
-  java: Coffee,
-  cpp: Cog,
 };
 
 // Color schemes for sections
@@ -26,14 +24,10 @@ const sectionColors: Record<string, string> = {
   sql: "from-orange-500/20 to-amber-500/20 border-orange-500/30 hover:border-orange-500/50",
   javascript: "from-yellow-500/20 to-yellow-400/20 border-yellow-500/30 hover:border-yellow-500/50",
   typescript: "from-blue-600/20 to-blue-500/20 border-blue-600/30 hover:border-blue-600/50",
-  java: "from-red-600/20 to-orange-600/20 border-red-600/30 hover:border-red-600/50",
-  cpp: "from-purple-600/20 to-pink-600/20 border-purple-600/30 hover:border-purple-600/50",
 };
 
 export default function Home() {
-  const sections = getSections().filter(section => 
-    section.id !== 'java' && section.id !== 'cpp'
-  );
+  const sections = getSections();
 
   return (
     <main className="min-h-screen bg-background font-sans">

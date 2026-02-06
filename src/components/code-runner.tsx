@@ -5,11 +5,11 @@
 import { useState, useCallback, useEffect } from "react";
 import Editor from "react-simple-code-editor";
 import { highlight, languages } from "prismjs";
-import "prismjs/components/prism-clike";
+
 import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-typescript";
 import "prismjs/components/prism-python";
-import "prismjs/components/prism-java";
+
 import "prismjs/components/prism-sql";
 import "prismjs/themes/prism-tomorrow.css"; // Dark theme
 import { Button } from "./ui/button";
