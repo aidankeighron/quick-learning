@@ -141,7 +141,7 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
     let result = "";
 
     try {
-      if (language === "javascript" || language === "typescript") {
+      if (language === "javascript") {
         // Capture console.log
         const logs: string[] = [];
         const originalLog = console.log;
@@ -164,15 +164,6 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
         
         let codeToRun = code + "\n" + verificationPart;
 
-        if (language === "typescript") {
-            try {
-                codeToRun = transform(codeToRun, { transforms: ["typescript"] }).code;
-            } catch (e: any) {
-                // Friendly error wrapper
-                throw new Error(`Compilation Error: ${e.message}\nCheck your syntax (e.g., use 'let x: number' not 'let: number x')`);
-            }
-        }
-
         try {
           // eslint-disable-next-line no-new-func
           new Function(codeToRun)();
@@ -186,6 +177,62 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
         }
         
         result = logs.join("\n");
+      } else if (language === "typescript") {
+        // TypeScript-specific validation: Ensure the code actually uses type annotations
+        const hasTypeAnnotations = (
+          /:[\s]*\w+/.test(code) ||  // Variable/param type annotations like `: number`
+          /interface\s+\w+/.test(code) ||  // Interface definitions
+          /type\s+\w+\s*=/.test(code) || // Type aliases
+          /<\w+>/.test(code) ||  // Generics
+          /as\s+\w+/.test(code)  // Type assertions
+        );
+        
+        if (!hasTypeAnnotations && !code.includes("//skip-ts-check")) {
+          setError(
+            "⚠️ TypeScript Validation Failed: Your code doesn't use any type annotations!\\n\\n" +
+            "TypeScript requires type annotations like:\\n" +
+            "  • const age: number = 25\\n" +
+            "  • function add(a: number, b: number): number { }\\n" +
+            "  • interface User { id: number }\\n\\n" +
+            "Plain JavaScript won't pass TypeScript challenges."
+          );
+          return;
+        }
+        
+        const fullCode = code + (hiddenSuffixCode ? "\\n" + hiddenSuffixCode : "");
+        const ts = await import("typescript");
+        let jsCode: string;
+        
+        try {
+          jsCode = ts.transpile(fullCode, {
+            target: ts.ScriptTarget.ES2020,
+            module: ts.ModuleKind.CommonJS
+          });
+        } catch (err: any) {
+          setError(`TypeScript Compilation Error: ${err.message}`);
+          return;
+        }
+
+        // Capture console
+        const logs: string[] = [];
+        const originalLog = console.log;
+        console.log = (...args: any[]) => {
+          logs.push(args.map(String).join(" "));
+        };
+
+        try {
+          const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
+          const fn = new AsyncFunction(jsCode);
+          await fn();
+        } catch (e: any) {
+          console.log = originalLog;
+          setError(e.message || "Runtime Error");
+          return;
+        } finally {
+          console.log = originalLog;
+        }
+
+        result = logs.join("\\n");
       } else if (language === "python") {
         const codeToRun = code + (hiddenSuffixCode ? "\n" + hiddenSuffixCode : "");
         try {
