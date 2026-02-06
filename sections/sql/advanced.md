@@ -1,6 +1,8 @@
 ---
 title: "Advanced SQL"
 description: "Subqueries, CTEs, and Unions."
+order: 4
+difficulty: "Advanced"
 ---
 
 ## Question 1: Subquery Concept

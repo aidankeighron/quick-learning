@@ -1,6 +1,8 @@
 ---
 title: "Decorators"
 description: "Modify function behavior with higher-order functions."
+order: 2
+difficulty: "Intermediate"
 ---
 
 ## Question 1: Decorator Syntax

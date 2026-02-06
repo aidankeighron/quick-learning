@@ -1,6 +1,8 @@
 ---
 title: "Context Managers"
 description: "Managing resources with the with statement."
+order: 3
+difficulty: "Intermediate"
 ---
 
 ## Question 1: Context Manager Syntax

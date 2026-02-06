@@ -1,6 +1,8 @@
 ---
 title: "Joins"
 description: "Combining rows from two or more tables."
+order: 2
+difficulty: "Intermediate"
 ---
 
 ## Question 1: Join Purpose

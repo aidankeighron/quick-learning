@@ -1,6 +1,8 @@
 ---
 title: "Generators"
 description: "Lazy evaluation with yield and iterators."
+order: 1
+difficulty: "Intermediate"
 ---
 
 ## Question 1: Generator Syntax

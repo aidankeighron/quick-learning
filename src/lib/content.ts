@@ -15,6 +15,9 @@ export type Topic = {
   id: string;
   title: string;
   description: string;
+  order: number;
+  difficulty: "Beginner" | "Intermediate" | "Advanced";
+  questionCount: number;
 };
 
 export type Quiz = {
@@ -59,13 +62,20 @@ export function getSections(): Section[] {
     const topicFiles = fs.readdirSync(sectionPath).filter(f => f.endsWith(".md") && f !== "info.md");
     const topics = topicFiles.map(file => {
       const content = fs.readFileSync(path.join(sectionPath, file), "utf-8");
-      const { data: topicData } = matter(content);
+      const { data: topicData, content: markdownContent } = matter(content);
+      
+      // Calculate question count (approximate by counting H2 headers)
+      const questionCount = (markdownContent.match(/^## /gm) || []).length;
+
       return {
         id: file.replace(".md", ""),
         title: topicData.title,
-        description: topicData.description
+        description: topicData.description,
+        order: topicData.order || 999,
+        difficulty: topicData.difficulty || "Beginner",
+        questionCount
       };
-    });
+    }).sort((a, b) => a.order - b.order);
 
     return {
       id: folder,

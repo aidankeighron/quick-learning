@@ -1,6 +1,8 @@
 ---
 title: "Aggregates"
 description: "Summarizing data with GROUP BY, COUNT, SUM."
+order: 3
+difficulty: "Intermediate"
 ---
 
 ## Question 1: Counting Rows

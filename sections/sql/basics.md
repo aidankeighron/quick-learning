@@ -1,6 +1,8 @@
 ---
 title: "SQL Basics"
 description: "Fundamental commands: SELECT, WHERE, ORDER BY."
+order: 1
+difficulty: "Beginner"
 ---
 
 ## Question 1: SQL Purpose

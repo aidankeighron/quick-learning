@@ -40,10 +40,24 @@ export default function Home() {
                     className="block h-full"
                   >
                     <Card className="h-full hover:bg-accent/10 hover:border-accent transition-colors">
-                      <CardHeader>
-                        <CardTitle className="text-lg">{topic.title}</CardTitle>
-                        <CardDescription>{topic.description}</CardDescription>
-                      </CardHeader>
+                        <CardHeader>
+                          <div className="flex justify-between items-start mb-2">
+                             <div className={`text-xs px-2 py-1 rounded-full border ${
+                               topic.difficulty === "Beginner" 
+                                 ? "bg-green-500/10 text-green-600 border-green-500/20" 
+                                 : topic.difficulty === "Intermediate" 
+                                 ? "bg-yellow-500/10 text-yellow-600 border-yellow-500/20" 
+                                 : "bg-red-500/10 text-red-600 border-red-500/20"
+                             }`}>
+                               {topic.difficulty}
+                             </div>
+                             <div className="text-xs text-muted-foreground">
+                               {topic.questionCount} Questions
+                             </div>
+                          </div>
+                          <CardTitle className="text-lg">{topic.title}</CardTitle>
+                          <CardDescription>{topic.description}</CardDescription>
+                        </CardHeader>
                     </Card>
                   </Link>
                 ))}

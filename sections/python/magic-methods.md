@@ -1,6 +1,8 @@
 ---
 title: "Magic Methods"
 description: "Understand dunder methods like __init__, __str__, and __len__."
+order: 5
+difficulty: "Advanced"
 ---
 
 ## Question 1: Initialization

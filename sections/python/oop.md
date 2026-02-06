@@ -1,6 +1,8 @@
 ---
 title: "Object-Oriented Programming"
 description: "Classes, Inheritance, and Polymorphism."
+order: 4
+difficulty: "Advanced"
 ---
 
 ## Question 1: Class Definition
