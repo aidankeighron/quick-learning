@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 import { transform } from "sucrase";
 
 type CodeRunnerProps = {
-  language: "javascript" | "python" | "sql" | "typescript" | "java";
+  language: "javascript" | "python" | "sql" | "typescript" | "java" | "c" | "cpp";
   initialCode?: string;
   hiddenSuffixCode?: string;
   onOutput: (output: string) => void;
