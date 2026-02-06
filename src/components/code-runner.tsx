@@ -39,10 +39,9 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
     setIsLoading(true);
     let result = "";
 
-    const codeToRun = code + (hiddenSuffixCode ? "\n" + hiddenSuffixCode : "");
-
     try {
       if (language === "javascript") {
+        const codeToRun = code + (hiddenSuffixCode ? "\n" + hiddenSuffixCode : "");
         // Capture console.log
         const logs: string[] = [];
         const originalLog = console.log;
@@ -61,6 +60,7 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
         
         result = logs.join("\n");
       } else if (language === "python") {
+        const codeToRun = code + (hiddenSuffixCode ? "\n" + hiddenSuffixCode : "");
         try {
             const { loadPyodide } = await import("@/lib/pyodide");
             const pyodide = await loadPyodide();
@@ -70,35 +70,37 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
             pyodide.setStdout({ batched: (msg: string) => { result += msg + "\n"; } });
             
             await pyodide.runPythonAsync(codeToRun);
-            // Result is accumulated in 'result' via stdout callback
         } catch (e: any) {
             throw e;
         }
       } else {
+        // SQL Handling
         try {
             const { loadPyodide } = await import("@/lib/pyodide");
             const pyodide = await loadPyodide();
             if (!pyodide) throw new Error("Failed to load Python environment.");
 
-            // Load sqlite3 if not already loaded
+            // Load sqlite3
             try {
                await pyodide.loadPackage("sqlite3");
             } catch (e) {
-               console.warn("sqlite3 might already be loaded", e);
+               // ignore if loaded
             }
 
-            // Pass query securely via globals
-            pyodide.globals.set("user_query", codeToRun);
+            // Pass queries via globals
+            pyodide.globals.set("user_query", code);
+            pyodide.globals.set("answer_query", hiddenSuffixCode || "");
 
             // Capture stdout
             pyodide.setStdout({ batched: (msg: string) => { result += msg + "\n"; } });
 
             const seedScript = `
 import sqlite3
+import js
 
 def run_sql():
-    # Retrieve query from globals (user_query is injected via pyodide.globals.set)
-    query = user_query
+    user_query = user_query # from globals
+    answer_query = answer_query # from globals
     
     con = sqlite3.connect(":memory:")
     cur = con.cursor()
@@ -127,44 +129,89 @@ def run_sql():
     INSERT INTO Products VALUES (5, 'Headphones', 'Electronics', 199.99, 30);
     """)
 
+    # 1. Run User Query
+    user_rows = []
+    user_cols = []
+    
     try:
-        cur.execute(query)
-        
-        if query.strip().upper().startswith("SELECT") or query.strip().upper().startswith("WITH"):
-            if cur.description:
-                col_names = [description[0] for description in cur.description]
-                rows = cur.fetchall()
-                
-                # Formatted Output
-                if not rows:
-                    print("No results found.")
-                else:
-                    # Calculate column widths
-                    widths = [len(str(c)) for c in col_names]
-                    for row in rows:
-                        for i, val in enumerate(row):
-                            widths[i] = max(widths[i], len(str(val)))
-                    
-                    # Print Header
-                    header = " | ".join(f"{str(col):<{w}}" for col, w in zip(col_names, widths))
-                    print(header)
-                    print("-" * len(header))
-                    
-                    # Print Rows
-                    for row in rows:
-                        print(" | ".join(f"{str(val):<{w}}" for val, w in zip(row, widths)))
+        cur.execute(user_query)
+        if cur.description:
+            user_cols = [d[0] for d in cur.description]
+            user_rows = cur.fetchall()
+            
+            # Print User Output
+            if not user_rows:
+                print("No results found.")
             else:
-                print("Query executed, but no results returned.")
-                
+                 widths = [len(str(c)) for c in user_cols]
+                 for row in user_rows:
+                     for i, val in enumerate(row):
+                         widths[i] = max(widths[i], len(str(val)))
+                 header = " | ".join(f"{str(col):<{w}}" for col, w in zip(user_cols, widths))
+                 print(header)
+                 print("-" * len(header))
+                 for row in user_rows:
+                     print(" | ".join(f"{str(val):<{w}}" for val, w in zip(row, widths)))
         else:
-             print(f"Query executed successfully.")
+             print("Query executed.")
              if cur.rowcount > 0:
                  print(f"Rows affected: {cur.rowcount}")
 
     except Exception as e:
         print(f"SQL Error: {e}")
-    finally:
-        con.close()
+        return
+
+    # 2. Run Answer Query (if provided)
+    if not answer_query:
+        # If no answer provided, just success (sandbox mode)
+        return
+
+    ans_rows = []
+    ans_cols = []
+    
+    try:
+        cur_ans = con.cursor()
+        cur_ans.execute(answer_query)
+        if cur_ans.description:
+            ans_cols = [d[0] for d in cur_ans.description]
+            ans_rows = cur_ans.fetchall()
+    except Exception as e:
+        print(f"Reference Error: {e}")
+        return
+
+    # 3. Compare Results
+    # A. Check Column Count
+    if len(user_cols) != len(ans_cols):
+        print(f"[ERROR] Wrong number of columns. Expected {len(ans_cols)}, got {len(user_cols)}.")
+        return
+
+    # B. Check Row Count
+    if len(user_rows) != len(ans_rows):
+        print(f"[ERROR] Wrong number of rows. Expected {len(ans_rows)} rows, got {len(user_rows)}.")
+        return
+
+    # C. Check Data 
+    # Determine if order matters
+    check_order = "ORDER BY" in answer_query.upper()
+    
+    matched = False
+    
+    if check_order:
+        if user_rows == ans_rows:
+            matched = True
+        else:
+            print("[ERROR] Data mismatch or wrong order. Ensure you sort correctly.")
+    else:
+        # Sort both by all columns for set comparison
+        if sorted(user_rows) == sorted(ans_rows):
+            matched = True
+        else:
+            print("[ERROR] Data mismatch. The returned records do not match expected results.")
+            
+    if matched:
+        print("[SUCCESS]")
+
+    con.close()
 
 run_sql()
 `;
@@ -179,11 +226,11 @@ run_sql()
       onOutput(result);
     } catch (err: any) {
       setError(err.message);
-      onOutput(""); // Clear output on error? Or keep partial?
+      onOutput(""); 
     } finally {
       setIsLoading(false);
     }
-  }, [code, language, onOutput]);
+  }, [code, language, hiddenSuffixCode, onOutput]);
 
   return (
     <div className={cn("border rounded-md overflow-hidden bg-[#1d1f21]", className)}>

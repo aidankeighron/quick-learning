@@ -44,10 +44,35 @@ export function QuizRunner({ quiz }: QuizRunnerProps) {
 
     if (currentQuestion.type === "code") {
         if (!codeOutput) return;
-        const expected = (currentQuestion.expectedOutput || "").trim();
-        const actual = codeOutput.trim();
-        // Simple exact match check, can be improved
-        isCorrect = actual === expected;
+        
+        let actual = codeOutput.trim();
+        let expected = (currentQuestion.expectedOutput || "").trim();
+        
+        if (currentQuestion.language === "sql") {
+             // For SQL, we look for [SUCCESS] or [ERROR]
+             if (actual.includes("[SUCCESS]")) {
+                 isCorrect = true;
+             } else if (actual.includes("[ERROR]")) {
+                 isCorrect = false;
+                 // Extract error message for display if needed?
+                 // The error is already printed in the CodeRunner output, 
+                 // but we can also show it in the feedback box if we parse it.
+                 // For now, let's just mark incorrect. 
+                 // The user sees the error in the terminal output.
+             } else {
+                 // Fallback if script failed silently or user query crashed without our markers
+                 // Usually means SQL Error which is printed.
+                 isCorrect = false;
+             }
+        } else {
+            // Python/JS simple check
+            // For complex Python output, we might want similar markers later.
+            // But for now, keep exact string match or 'Correct!' check
+            if (actual.includes("Correct!") || actual === expected) {
+                isCorrect = true;
+            }
+        }
+
     } else {
         if (selectedOptionIndex === null) return;
         isCorrect = currentQuestion.options![selectedOptionIndex].isCorrect;
