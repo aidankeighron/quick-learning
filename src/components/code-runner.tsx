@@ -5,15 +5,17 @@ import Editor from "react-simple-code-editor";
 import { highlight, languages } from "prismjs";
 import "prismjs/components/prism-clike";
 import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-typescript";
 import "prismjs/components/prism-python";
 import "prismjs/components/prism-sql";
 import "prismjs/themes/prism-tomorrow.css"; // Dark theme
 import { Button } from "./ui/button";
 import { Play, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { transform } from "sucrase";
 
 type CodeRunnerProps = {
-  language: "javascript" | "python" | "sql";
+  language: "javascript" | "python" | "sql" | "typescript";
   initialCode?: string;
   hiddenSuffixCode?: string;
   onOutput: (output: string) => void;
@@ -24,6 +26,8 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
   const [code, setCode] = useState(
     initialCode || (language === "javascript" 
       ? "console.log('Hello World');" 
+      : language === "typescript"
+      ? "const msg: string = 'Hello World';\nconsole.log(msg);"
       : language === "python" 
       ? "print('Hello World')" 
       : "SELECT * FROM users;")
@@ -40,7 +44,7 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
     let result = "";
 
     try {
-      if (language === "javascript") {
+      if (language === "javascript" || language === "typescript") {
         // Capture console.log
         const logs: string[] = [];
         const originalLog = console.log;
@@ -55,14 +59,21 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
         });
 
         // Inject 'output' variable for synchronous checks
-        // Use concatenation to avoid issues if 'code' contains backticks
         const verificationPart = hiddenSuffixCode ? `
             // Snapshot output for synchronous checks
             var output = console.output; 
             ${hiddenSuffixCode}
         ` : "";
         
-        const codeToRun = code + "\n" + verificationPart;
+        let codeToRun = code + "\n" + verificationPart;
+
+        if (language === "typescript") {
+            try {
+                codeToRun = transform(codeToRun, { transforms: ["typescript"] }).code;
+            } catch (e: any) {
+                throw new Error(`Compilation Error: ${e.message}`);
+            }
+        }
 
         try {
           // eslint-disable-next-line no-new-func
@@ -288,7 +299,7 @@ run_sql()
         <Editor
           value={code}
           onValueChange={setCode}
-          highlight={(code) => highlight(code, languages[language === "sql" ? "sql" : language === "python" ? "python" : "javascript"] || languages.js, language)}
+          highlight={(code) => highlight(code, languages[language === "sql" ? "sql" : language === "python" ? "python" : language === "typescript" ? "typescript" : "javascript"] || languages.js, language)}
           padding={16}
           className="font-mono text-[14px] min-h-[100px]"
           textareaClassName="focus:outline-none"
