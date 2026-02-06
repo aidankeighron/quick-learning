@@ -8,6 +8,7 @@ difficulty: "Advanced"
 ## Question 1: Subquery Order
 In a nested subquery, which query is executed first?
 
+> Link: https://www.w3schools.com/sql/sql_subqueries.asp
 > Type: multiple-choice
 - [ ] The outer query
 - [x] The inner query
@@ -17,6 +18,7 @@ In a nested subquery, which query is executed first?
 ## Question 2: CTE Definition
 What does CTE stand for?
 
+> Link: https://www.w3schools.com/sql/sql_with.asp
 > Type: multiple-choice
 - [ ] Common Table Extension
 - [x] Common Table Expression
@@ -26,6 +28,7 @@ What does CTE stand for?
 ## Question 3: Subquery Filtering
 Find all products that have a price greater than the average price of all products. Use a subquery.
 
+> Link: https://www.w3schools.com/sql/sql_subqueries.asp
 > Type: code
 > Language: sql
 > Starting Code:
@@ -38,6 +41,7 @@ SELECT * FROM Products WHERE price > (SELECT AVG(price) FROM Products);
 ## Question 4: Simple CTE
 Use a Common Table Expression (CTE) named `ExpensiveItems` to select products with price > 500. Then select everything from that CTE.
 
+> Link: https://www.w3schools.com/sql/sql_with.asp
 > Type: code
 > Language: sql
 > Starting Code:
@@ -53,6 +57,7 @@ WITH ExpensiveItems AS (SELECT * FROM Products WHERE price > 500) SELECT * FROM 
 ## Question 5: Union Duplicates
 How does `UNION` differ from `UNION ALL`?
 
+> Link: https://www.w3schools.com/sql/sql_union.asp
 > Type: multiple-choice
 - [x] UNION removes duplicates, UNION ALL keeps them
 - [ ] UNION ALL removes duplicates, UNION keeps them
@@ -62,6 +67,7 @@ How does `UNION` differ from `UNION ALL`?
 ## Question 6: Window Functions
 What clause defines the "window" or set of rows a window function operates on?
 
+> Link: https://www.w3schools.com/sql/sql_window_functions.asp
 > Type: multiple-choice
 - [ ] GROUP BY
 - [x] OVER
@@ -71,6 +77,7 @@ What clause defines the "window" or set of rows a window function operates on?
 ## Question 7: Union Operator
 Create a list of all names from both `Users` and `Products`. Use `UNION` to combine the queries.
 
+> Link: https://www.w3schools.com/sql/sql_union.asp
 > Type: code
 > Language: sql
 > Starting Code:
@@ -84,6 +91,7 @@ Laptop...
 ## Question 8: Exists Operator
 Select the names of users who have placed at least one order. Use `EXISTS`.
 
+> Link: https://www.w3schools.com/sql/sql_exists.asp
 > Type: code
 > Language: sql
 > Starting Code:
@@ -96,6 +104,7 @@ Alice Smith...
 ## Question 9: Window Function (Rank)
 Rank products by price (highest first) using `RANK() OVER (...)`.
 
+> Link: https://www.w3schools.com/sql/sql_window_functions.asp
 > Type: code
 > Language: sql
 > Starting Code:
@@ -108,6 +117,7 @@ Laptop | 999.99 | 1...
 ## Question 10: Case Statement
 Select the product name and a new column `CategoryPrice` that is 'High' if price > 500, else 'Low'.
 
+> Link: https://www.w3schools.com/sql/sql_case.asp
 > Type: code
 > Language: sql
 > Starting Code:

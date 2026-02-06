@@ -8,6 +8,7 @@ difficulty: "Intermediate"
 ## Question 1: Purpose
 What is the primary benefit of adding type hints to Python code?
 
+> Link: https://docs.python.org/3/library/typing.html
 > Type: multiple-choice
 - [ ] It makes the code faster at runtime
 - [x] It allows static analysis tools to find errors
@@ -17,6 +18,7 @@ What is the primary benefit of adding type hints to Python code?
 ## Question 2: Syntax
 What is the standard syntax for annotating a variable `x` as an integer?
 
+> Link: https://docs.python.org/3/library/typing.html
 > Type: multiple-choice
 - [ ] `int x = 5`
 - [ ] `x: int = 5`
@@ -26,6 +28,7 @@ What is the standard syntax for annotating a variable `x` as an integer?
 ## Question 3: Basic Variable Types
 Annotate the variables `name` (string) and `age` (integer).
 
+> Link: https://docs.python.org/3/library/typing.html
 > Type: code
 > Language: python
 > Starting Code:
@@ -42,6 +45,7 @@ print("Correct!")
 ## Question 4: Function Arguments
 Add type hints to the function `greet` so `name` is a string and it returns a string.
 
+> Link: https://www.w3schools.com/python/python_functions.asp
 > Type: code
 > Language: python
 > Starting Code:
@@ -56,6 +60,7 @@ print("Correct!")
 ## Question 5: List Syntax
 How do you annotate a list of integers (before Python 3.9)?
 
+> Link: https://www.w3schools.com/python/python_lists.asp
 > Type: multiple-choice
 - [ ] `list(int)`
 - [x] `List[int]` (from typing)
@@ -65,6 +70,7 @@ How do you annotate a list of integers (before Python 3.9)?
 ## Question 6: Any Type
 Which type hint indicates that a variable can be of ANY type, effectively disabling type checking for it?
 
+> Link: https://docs.python.org/3/library/typing.html
 > Type: multiple-choice
 - [ ] `Object`
 - [ ] `All`
@@ -74,6 +80,7 @@ Which type hint indicates that a variable can be of ANY type, effectively disabl
 ## Question 7: Lists
 Import `List` from `typing` (or use built-in `list` for Python 3.9+) and annotate `scores` as a list of integers.
 
+> Link: https://www.w3schools.com/python/python_lists.asp
 > Type: code
 > Language: python
 > Starting Code:
@@ -91,6 +98,7 @@ print("Correct!")
 ## Question 8: Dictionaries
 Annotate `user_data` as a dictionary where keys are strings and values are integers.
 
+> Link: https://www.w3schools.com/python/python_dictionaries.asp
 > Type: code
 > Language: python
 > Starting Code:
@@ -107,6 +115,7 @@ print("Correct!")
 ## Question 9: Optional Types
 Use `Optional` from `typing` to annotate `middle_name` which can be a string or `None`.
 
+> Link: https://docs.python.org/3/library/typing.html
 > Type: code
 > Language: python
 > Starting Code:
@@ -124,6 +133,7 @@ print("Correct!")
 ## Question 10: Union Types
 Use `Union` to write a function `double(value)` that accepts either an `int` or a `float`, and returns the same type.
 
+> Link: https://www.w3schools.com/python/python_functions.asp
 > Type: code
 > Language: python
 > Starting Code:

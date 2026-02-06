@@ -8,6 +8,7 @@ difficulty: "Beginner"
 ## Question 1: Data Retrieval
 Which SQL keyword is used to retrieve data from a database?
 
+> Link: https://www.w3schools.com/sql/sql_select.asp
 > Type: multiple-choice
 - [ ] GET
 - [ ] FETCH
@@ -17,6 +18,7 @@ Which SQL keyword is used to retrieve data from a database?
 ## Question 2: Filtering Records
 Which clause is used to filter records?
 
+> Link: https://www.w3schools.com/sql/sql_where.asp
 > Type: multiple-choice
 - [ ] FILTER
 - [x] WHERE
@@ -26,6 +28,7 @@ Which clause is used to filter records?
 ## Question 3: Select All
 Retrieve all columns from the `Users` table.
 
+> Link: https://www.w3schools.com/sql/sql_select.asp
 > Type: code
 > Language: sql
 > Starting Code:
@@ -38,6 +41,7 @@ SELECT * FROM Users;
 ## Question 4: Select Specific Columns
 Select only the `name` and `country` columns from the `Users` table.
 
+> Link: https://www.w3schools.com/sql/sql_select.asp
 > Type: code
 > Language: sql
 > Starting Code:
@@ -51,6 +55,7 @@ Bob Jones | UK...
 ## Question 5: Sorting Direction
 Which keyword sorts result in descending order?
 
+> Link: https://www.w3schools.com/sql/sql_orderby.asp
 > Type: multiple-choice
 - [ ] DOWN
 - [x] DESC
@@ -60,6 +65,7 @@ Which keyword sorts result in descending order?
 ## Question 6: Unique Values
 How do you select only distinct (different) values?
 
+> Link: https://www.w3schools.com/sql/sql_distinct.asp
 > Type: multiple-choice
 - [ ] SELECT UNIQUE
 - [x] SELECT DISTINCT
@@ -69,6 +75,7 @@ How do you select only distinct (different) values?
 ## Question 7: Filtering with WHERE
 Select all columns from `Orders` where the `status` is 'Completed'.
 
+> Link: https://www.w3schools.com/sql/sql_where.asp
 > Type: code
 > Language: sql
 > Starting Code:
@@ -81,6 +88,7 @@ SELECT * FROM Orders WHERE status = 'Completed';
 ## Question 8: Sorting Results
 Select all columns from `Products` ordered by `price` in descending order relative to largest first (DESC).
 
+> Link: https://www.w3schools.com/sql/sql_orderby.asp
 > Type: code
 > Language: sql
 > Starting Code:
@@ -93,6 +101,7 @@ SELECT * FROM Products ORDER BY price DESC;
 ## Question 9: Multiple Conditions
 Select all `Products` where the `category` is 'Electronics' AND the `price` is greater than 500.
 
+> Link: https://www.w3schools.com/sql/sql_and_or.asp
 > Type: code
 > Language: sql
 > Starting Code:
@@ -105,6 +114,7 @@ SELECT * FROM Products WHERE category = 'Electronics' AND price > 500;
 ## Question 10: Limiting Results
 Select the first 3 rows from the `Users` table.
 
+> Link: https://www.w3schools.com/sql/sql_top.asp
 > Type: code
 > Language: sql
 > Starting Code:

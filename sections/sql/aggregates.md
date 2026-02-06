@@ -8,6 +8,7 @@ difficulty: "Intermediate"
 ## Question 1: Aggregate Definition
 What is an aggregate function?
 
+> Link: https://www.w3schools.com/sql/sql_count_avg_sum.asp
 > Type: multiple-choice
 - [ ] A function that operates on a single row
 - [x] A function that performs a calculation on a set of values and returns a single value
@@ -17,6 +18,7 @@ What is an aggregate function?
 ## Question 2: NULL Values
 How does `COUNT(column_name)` handle NULL values?
 
+> Link: https://www.w3schools.com/sql/sql_count_avg_sum.asp
 > Type: multiple-choice
 - [ ] It includes them
 - [x] It ignores them
@@ -26,6 +28,7 @@ How does `COUNT(column_name)` handle NULL values?
 ## Question 3: Basic Count
 Count the total number of rows in the `Products` table.
 
+> Link: https://www.w3schools.com/sql/sql_count_avg_sum.asp
 > Type: code
 > Language: sql
 > Starting Code:
@@ -38,6 +41,7 @@ SELECT COUNT(*) FROM Products;
 ## Question 4: Summing Values
 Calculate the total revenue (sum of `amount`) from the `Orders` table.
 
+> Link: https://www.w3schools.com/sql/sql_count_avg_sum.asp
 > Type: code
 > Language: sql
 > Starting Code:
@@ -50,6 +54,7 @@ SELECT SUM(amount) FROM Orders;
 ## Question 5: Group By Usage
 Which clause is mandatory when using non-aggregated columns with aggregate functions?
 
+> Link: https://www.w3schools.com/sql/sql_groupby.asp
 > Type: multiple-choice
 - [ ] ORDER BY
 - [ ] WHERE
@@ -59,6 +64,7 @@ Which clause is mandatory when using non-aggregated columns with aggregate funct
 ## Question 6: Filtering Aggregates
 Which clause must be used to filter the *results* of an aggregate function (e.g., count > 5)?
 
+> Link: https://www.w3schools.com/sql/sql_having.asp
 > Type: multiple-choice
 - [ ] WHERE
 - [x] HAVING
@@ -68,6 +74,7 @@ Which clause must be used to filter the *results* of an aggregate function (e.g.
 ## Question 7: Average Value
 Find the average price of all products.
 
+> Link: https://www.w3schools.com/sql/sql_count_avg_sum.asp
 > Type: code
 > Language: sql
 > Starting Code:
@@ -80,6 +87,7 @@ SELECT AVG(price) FROM Products;
 ## Question 8: Max and Min
 Find the price of the most expensive product.
 
+> Link: https://www.w3schools.com/sql/sql_min_max.asp
 > Type: code
 > Language: sql
 > Starting Code:
@@ -92,6 +100,7 @@ SELECT MAX(price) FROM Products;
 ## Question 9: Group By
 Count the number of orders placed by each `user_id`. Select `user_id` and the count.
 
+> Link: https://www.w3schools.com/sql/sql_groupby.asp
 > Type: code
 > Language: sql
 > Starting Code:
@@ -105,6 +114,7 @@ SELECT user_id, COUNT(*) FROM Orders GROUP BY user_id;
 ## Question 10: Having Clause
 Find `user_id`s that have placed more than 1 order. Use `GROUP BY` and `HAVING`.
 
+> Link: https://www.w3schools.com/sql/sql_having.asp
 > Type: code
 > Language: sql
 > Starting Code:

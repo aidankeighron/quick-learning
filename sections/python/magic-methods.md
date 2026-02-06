@@ -8,6 +8,7 @@ difficulty: "Advanced"
 ## Question 1: What are Magic Methods?
 What distinguishes magic methods (dunder methods) in Python?
 
+> Link: https://rszalski.github.io/magicmethods/
 > Type: multiple-choice
 - [ ] They disappear after use
 - [x] They start and end with double underscores
@@ -17,6 +18,7 @@ What distinguishes magic methods (dunder methods) in Python?
 ## Question 2: Constructor
 Which magic method is commonly known as the constructor/initializer?
 
+> Link: https://rszalski.github.io/magicmethods/
 > Type: multiple-choice
 - [ ] `__new__`
 - [x] `__init__`
@@ -26,6 +28,7 @@ Which magic method is commonly known as the constructor/initializer?
 ## Question 3: Initialization (__init__)
 Define a class `Person` with an `__init__` method that assigns the argument `name` to `self.name`.
 
+> Link: https://rszalski.github.io/magicmethods/
 > Type: code
 > Language: python
 > Starting Code:
@@ -42,6 +45,7 @@ print("Correct!")
 ## Question 4: String Representation (__str__)
 Define a `__str__` method for `Person` that returns the string "Person: [name]".
 
+> Link: https://rszalski.github.io/magicmethods/
 > Type: code
 > Language: python
 > Starting Code:
@@ -61,6 +65,7 @@ print("Correct!")
 ## Question 5: Debug Representation
 What is `__repr__` primarily used for?
 
+> Link: https://rszalski.github.io/magicmethods/
 > Type: multiple-choice
 - [ ] User-friendly string output
 - [x] Unambiguous representation for debugging
@@ -70,6 +75,7 @@ What is `__repr__` primarily used for?
 ## Question 6: Operator Overloading
 Which method implements the '+' operator?
 
+> Link: https://rszalski.github.io/magicmethods/
 > Type: multiple-choice
 - [ ] `__plus__`
 - [ ] `__sum__`
@@ -79,6 +85,7 @@ Which method implements the '+' operator?
 ## Question 7: Length (__len__)
 Define a class `Container` with a list `items`. Implement `__len__` to return the number of items.
 
+> Link: https://rszalski.github.io/magicmethods/
 > Type: code
 > Language: python
 > Starting Code:
@@ -98,6 +105,7 @@ print("Correct!")
 ## Question 8: Addition (__add__)
 Define a class `Point` with `x` and `y`. Implement `__add__` to return a new `Point` that is the sum of two points (add x's and y's).
 
+> Link: https://rszalski.github.io/magicmethods/
 > Type: code
 > Language: python
 > Starting Code:
@@ -120,6 +128,7 @@ print("Correct!")
 ## Question 9: Item Access (__getitem__)
 Define a class `Wrapper` that holds a list `data`. Implement `__getitem__` to allow indexing `wrapper[index]`.
 
+> Link: https://rszalski.github.io/magicmethods/
 > Type: code
 > Language: python
 > Starting Code:
@@ -139,6 +148,7 @@ print("Correct!")
 ## Question 10: Complete Class
 Create a class `Counter` that starts at 0. Implement `__add__` to add an integer to the counter, and `__str__` to return the current count as a string.
 
+> Link: https://rszalski.github.io/magicmethods/
 > Type: code
 > Language: python
 > Starting Code:

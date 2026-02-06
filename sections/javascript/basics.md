@@ -8,6 +8,7 @@ difficulty: "Beginner"
 ## Question 1: What is JavaScript?
 What is the primary role of JavaScript in web development?
 
+> Link: https://www.w3schools.com/js/js_intro.asp
 > Type: multiple-choice
 - [ ] To style web pages
 - [x] To add interactivity and logic to web pages
@@ -17,6 +18,7 @@ What is the primary role of JavaScript in web development?
 ## Question 2: Variable Declarations
 Which keyword declares a variable that cannot be reassigned?
 
+> Link: https://www.w3schools.com/js/js_variables.asp
 > Type: multiple-choice
 - [ ] var
 - [ ] let
@@ -26,6 +28,7 @@ Which keyword declares a variable that cannot be reassigned?
 ## Question 3: Hello World
 Write code to log the string "Hello World" to the console.
 
+> Link: https://www.w3schools.com/js/js_output.asp
 > Type: code
 > Language: javascript
 > Starting Code:
@@ -41,6 +44,7 @@ console.log("Correct!");
 ## Question 4: Variables
 Declare a variable named `score` using `let` and assign it the value `10`.
 
+> Link: https://www.w3schools.com/js/js_variables.asp
 > Type: code
 > Language: javascript
 > Starting Code:
@@ -58,6 +62,7 @@ console.log("Correct!");
 ## Question 5: Data Types
 What is the result of `typeof "Hello"` in JavaScript?
 
+> Link: https://www.w3schools.com/js/js_datatypes.asp
 > Type: multiple-choice
 - [x] "string"
 - [ ] "text"
@@ -67,6 +72,7 @@ What is the result of `typeof "Hello"` in JavaScript?
 ## Question 6: Equality Operators
 Which operator checks for both value and type equality (strict equality)?
 
+> Link: https://www.w3schools.com/js/js_comparisons.asp
 > Type: multiple-choice
 - [ ] ==
 - [ ] =
@@ -76,6 +82,7 @@ Which operator checks for both value and type equality (strict equality)?
 ## Question 7: Basic Function
 Write a function named `greet` that takes a name as an argument and returns "Hello, [name]!".
 
+> Link: https://www.w3schools.com/js/js_functions.asp
 > Type: code
 > Language: javascript
 > Starting Code:
@@ -91,6 +98,7 @@ console.log("Correct!");
 ## Question 8: Arrow Functions
 Convert the function below into an arrow function named `add` that returns the sum of `a` and `b`.
 
+> Link: https://www.w3schools.com/js/js_arrow_function.asp
 > Type: code
 > Language: javascript
 > Starting Code:
@@ -106,6 +114,7 @@ console.log("Correct!");
 ## Question 9: Template Literals
 Use a template literal (backticks) to create a string `message` that says "You have [count] items", where `count` is 5.
 
+> Link: https://www.w3schools.com/js/js_string_templates.asp
 > Type: code
 > Language: javascript
 > Starting Code:
@@ -119,6 +128,7 @@ console.log("Correct!");
 ## Question 10: Conditionals
 Write a function `checkSign(n)` that returns "Positive" if n > 0, "Negative" if n < 0, and "Zero" otherwise.
 
+> Link: https://www.w3schools.com/js/js_if_else.asp
 > Type: code
 > Language: javascript
 > Starting Code:
