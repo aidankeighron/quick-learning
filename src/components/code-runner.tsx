@@ -61,8 +61,8 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
   const [wasmerInitializing, setWasmerInitializing] = useState(false);
 
   useEffect(() => {
-    // Java: Strict check for Runtime (RunMain), not just Loader (Init)
-    if (typeof window !== "undefined" && window.cheerpjRunMain) {
+    // Java: Strict check for Runtime - verify ALL required functions
+    if (typeof window !== "undefined" && window.cheerpjRunMain && window.cheerpjFileWrite) {
         setJavaReady(true);
     }
   }, []);
@@ -98,15 +98,15 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
         // Call init and wait for completion
         await window.cheerpjInit();
         
-        // Wait for cheerpjRunMain to be available (the actual runtime)
+        // Wait for ALL required CheerpJ functions to be available
         attempts = 0;
-        while (!window.cheerpjRunMain && attempts < 100) {
+        while ((!window.cheerpjRunMain || !window.cheerpjFileWrite) && attempts < 100) {
             await new Promise(r => setTimeout(r, 100));
             attempts++;
         }
         
-        if (!window.cheerpjRunMain) {
-            throw new Error("CheerpJ runtime did not initialize properly");
+        if (!window.cheerpjRunMain || !window.cheerpjFileWrite) {
+            throw new Error("CheerpJ runtime did not initialize properly - missing required functions");
         }
         
         setJavaReady(true);
