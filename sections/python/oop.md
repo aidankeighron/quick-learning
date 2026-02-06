@@ -6,59 +6,85 @@ difficulty: "Advanced"
 ---
 
 ## Question 1: Class Definition
-Which keyword is used to define a class in Python?
+Define a class named `Car` with an empty body (use `pass`).
 
-- [ ] struct
-- [x] class
-- [ ] define
-- [ ] object
-
-> Hint: It's the same keyword used in C++ and Java.
-> Explanation: Use the `class` keyword to define a new class.
+> Type: code
+> Language: python
+> Starting Code:
+# Define class Car
+pass
+> Verification Code:
+assert 'Car' in locals() and isinstance(Car, type)
+print("Correct!")
+> Expected Output: Correct!
 
 ## Question 2: The Self Parameter
-What does the `self` parameter represent in a class method?
+Define a method `honk(self)` inside `Car` that returns the string "Beep!".
 
-- [ ] A reference to the global scope
-- [ ] A reference to the parent class
-- [x] A reference to the current instance of the class
-- [ ] A keyword for static methods
+> Type: code
+> Language: python
+> Starting Code:
+class Car:
+    def honk(self):
+        # Your code here
+        pass
+> Verification Code:
+c = Car()
+assert c.honk() == "Beep!"
+print("Correct!")
+> Expected Output: Correct!
 
-> Hint: It allows access to attributes and methods of the object.
-> Explanation: `self` represents the instance of the class. By using `self`, we can access the attributes and methods of the class in python.
+## Question 3: Inheritance
+Define a class `ElectricCar` that inherits from `Car`.
 
-## Question 3: Inheritance Syntax
-How do you define a class `Dog` that inherits from `Animal`?
+> Type: code
+> Language: python
+> Starting Code:
+class Car:
+    pass
 
-- [ ] class Dog extends Animal:
-- [ ] class Dog inherits Animal:
-- [x] class Dog(Animal):
-- [ ] class Dog : Animal
-
-> Hint: Parentheses are used to specify the parent class.
-> Explanation: Python uses `class Child(Parent):` syntax for inheritance.
+# Define ElectricCar inheriting from Car
+pass
+> Verification Code:
+assert issubclass(ElectricCar, Car)
+print("Correct!")
+> Expected Output: Correct!
 
 ## Question 4: Super Function
-What is the purpose of the `super()` function?
+Inside `Child.__init__`, use `super()` to call the parent's `__init__` method.
 
-- [ ] To create a superuser
-- [ ] To call a method from a child class
-- [x] To call a method from the parent class
-- [ ] To initialize a static variable
+> Type: code
+> Language: python
+> Starting Code:
+class Parent:
+    def __init__(self):
+        self.parent_init = True
 
-> Hint: It's often used in `__init__` methods.
-> Explanation: `super()` allows you to refer to the parent class.
+class Child(Parent):
+    def __init__(self):
+        # Call parent init using super()
+        pass
+> Verification Code:
+c = Child()
+assert hasattr(c, 'parent_init') and c.parent_init is True
+print("Correct!")
+> Expected Output: Correct!
 
 ## Question 5: Private Variables
-How do you loosely define a "private" variable in Python?
+Define a class `Secret` with an attribute `_key` set to "hidden" inside `__init__`. Use the single underscore convention.
 
-- [ ] private var_name
-- [ ] $var_name
-- [x] _var_name (convention) or __var_name (name mangling)
-- [ ] (var_name)
-
-> Hint: Python doesn't have true private variables, but uses leading underscores.
-> Explanation: A single underscore `_` is a convention for internal use. Double underscores `__` trigger name mangling.
+> Type: code
+> Language: python
+> Starting Code:
+class Secret:
+    def __init__(self):
+        # Set _key
+        pass
+> Verification Code:
+s = Secret()
+assert s._key == "hidden"
+print("Correct!")
+> Expected Output: Correct!
 
 ## Question 6: Class Method Implementation
 Write a class named `Greeter` with a method `greet(name)` that returns "Hello, [name]!".
@@ -71,5 +97,6 @@ class Greeter:
         pass
 > Verification Code:
 g = Greeter()
-print(g.greet("Python"))
-> Expected Output: Hello, Python!
+assert g.greet("Python") == "Hello, Python!"
+print("Correct!")
+> Expected Output: Correct!

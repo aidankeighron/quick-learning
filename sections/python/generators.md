@@ -5,64 +5,96 @@ order: 1
 difficulty: "Intermediate"
 ---
 
-## Question 1: Generator Syntax
-Which keyword turns a function into a generator?
-
-- [ ] return
-- [ ] gen
-- [x] yield
-- [ ] emit
-
-> Hint: It pauses execution and produces a value.
-> Explanation: `yield` produces a value and pauses the function, saving its state.
-
-## Question 2: Memory Efficiency
-Why are generators often more memory efficient than lists?
-
-- [ ] They are compressed
-- [x] They generate values one at a time on demand
-- [ ] They store values on disk
-- [ ] They use C pointers
-
-> Hint: Think about "lazy" evaluation.
-> Explanation: Generators do not store all values in memory; they calculate them on the fly.
-
-## Question 3: Getting Next Value
-Which function retrieves the next value from a generator?
-
-- [ ] get()
-- [x] next()
-- [ ] continue()
-- [ ] yield()
-
-> Hint: It advances the iterator.
-> Explanation: `next(gen)` or `gen.__next__()` resumes execution until the next yield.
-
-## Question 4: Stop Iteration
-What exception is raised when a generator is exhausted?
-
-- [ ] EndOfList
-- [x] StopIteration
-- [ ] GeneratorExit
-- [ ] Done
-
-> Hint: Loops handle this exception automatically.
-> Explanation: `StopIteration` signals that there are no more items.
-
-## Question 5: Generator Expressions
-Which syntax creates a generator expression?
-
-- [ ] [x for x in range(10)]
-- [ ] {x for x in range(10)}
-- [x] (x for x in range(10))
-- [ ] <x for x in range(10)>
-
-> Hint: It looks like a list comprehension but with parentheses.
-> Explanation: Parentheses `()` are used for generator expressions.
-
-## Question 6: Simple Generator
-Write a generator function `count_up_to(n)` that yields numbers from 1 to `n`.
+## Question 1: Basic Generator
+Create a generator function `simple_gen` that yields the number 1, then 2, then 3.
 
 > Type: code
 > Language: python
-> Expected Output: 
+> Starting Code:
+def simple_gen():
+    # Your code here
+    pass
+> Verification Code:
+assert list(simple_gen()) == [1, 2, 3]
+print("Correct!")
+> Expected Output: Correct!
+
+## Question 2: Generator with Arguments
+Write a generator function `count_to(n)` that yields numbers from 1 up to (and including) `n`.
+
+> Type: code
+> Language: python
+> Starting Code:
+def count_to(n):
+    # Your code here
+    pass
+> Verification Code:
+assert list(count_to(3)) == [1, 2, 3]
+assert list(count_to(1)) == [1]
+print("Correct!")
+> Expected Output: Correct!
+
+## Question 3: Using next()
+Given the generator `g`, use the `next()` function to help retrieve the first value and assign it to the variable `first_val`.
+
+> Type: code
+> Language: python
+> Starting Code:
+def my_gen():
+    yield "Start"
+    yield "End"
+
+g = my_gen()
+# first_val = ...
+> Verification Code:
+try:
+    if first_val == "Start":
+        print("Correct!")
+    else:
+        print(f"Got {first_val}")
+except NameError:
+    print("first_val not defined")
+> Expected Output: Correct!
+
+## Question 4: Generator Expressions
+Create a generator expression named `squares` that yields the square of numbers from 0 to 4 (inclusive). Use parens `()` not brackets `[]`.
+
+> Type: code
+> Language: python
+> Starting Code:
+# squares = ...
+> Verification Code:
+import types
+assert isinstance(squares, types.GeneratorType), "Must be a generator"
+assert list(squares) == [0, 1, 4, 9, 16]
+print("Correct!")
+> Expected Output: Correct!
+
+## Question 5: Yield From
+Write a generator `sub_gen` that uses `yield from` to yield all values from `range(3)`.
+
+> Type: code
+> Language: python
+> Starting Code:
+def sub_gen():
+    # Use yield from
+    pass
+> Verification Code:
+assert list(sub_gen()) == [0, 1, 2]
+print("Correct!")
+> Expected Output: Correct!
+
+## Question 6: Fibonacci Generator
+Write a generator `fibonacci(limit)` that yields Fibonacci numbers (0, 1, 1, 2, 3...) as long as they are less than `limit`.
+
+> Type: code
+> Language: python
+> Starting Code:
+def fibonacci(limit):
+    a, b = 0, 1
+    # Your code here
+    pass
+> Verification Code:
+assert list(fibonacci(10)) == [0, 1, 1, 2, 3, 5, 8]
+print("Correct!")
+> Expected Output: Correct! 

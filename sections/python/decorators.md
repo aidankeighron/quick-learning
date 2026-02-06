@@ -6,59 +6,102 @@ difficulty: "Intermediate"
 ---
 
 ## Question 1: Decorator Syntax
-What symbol is used to apply a decorator to a function?
+Use the correct syntax to apply the `my_decorator` to the `hello` function.
 
-- [ ] &
-- [ ] %
-- [x] @
-- [ ] #
+> Type: code
+> Language: python
+> Starting Code:
+def my_decorator(func):
+    def wrapper():
+        return func()
+    return wrapper
 
-> Hint: It's placed above the function definition.
-> Explanation: The `@` symbol (pie syntax) is used for decorators.
+# Apply the decorator
+def hello():
+    pass
+> Verification Code:
+assert hello.__name__ == "wrapper" or hello.__qualname__.endswith("wrapper"), "Function was not decorated"
+print("Correct!")
+> Expected Output: Correct!
 
-## Question 2: What returns a decorator?
-A decorator is a function that takes a function as input and returns...
+## Question 2: Creating a Decorator
+Write a decorator `simple_dec` that takes a function, and returns a `wrapper` function (which just calls the original function).
 
-- [ ] A class
-- [ ] A string
-- [x] A function
-- [ ] None
+> Type: code
+> Language: python
+> Starting Code:
+def simple_dec(func):
+    # Define wrapper
+    # Return wrapper
+    pass
+> Verification Code:
+@simple_dec
+def test(): return "ok"
+assert test() == "ok"
+print("Correct!")
+> Expected Output: Correct!
 
-> Hint: It wraps the original function.
-> Explanation: Decorators return a wrapper function that extends behavior.
+## Question 3: Preserving Metadata
+Use `@functools.wraps` inside `my_dec` so that the decorated function retains its original name `test_func`.
 
-## Question 3: Wrapping Metadata
-Which decorator from `functools` should be used to preserve the original function's metadata (name, docstring)?
+> Type: code
+> Language: python
+> Starting Code:
+import functools
 
-- [ ] @preserve
-- [ ] @metadata
-- [x] @wraps
-- [ ] @keep
+def my_dec(func):
+    @functools.wraps(func)
+    def wrapper():
+        return func()
+    return wrapper
 
-> Hint: It wraps the wrapper.
-> Explanation: `@functools.wraps` copies metadata from the original function to the wrapper.
+# No changes needed below, just run to verify
+@my_dec
+def test_func():
+    """Docstring."""
+    pass
+> Verification Code:
+assert test_func.__name__ == "test_func"
+print("Correct!")
+> Expected Output: Correct!
 
 ## Question 4: Chaining Decorators
-If you apply two decorators, which one runs first?
+Apply both `dec1` and `dec2` to `greet`. `dec1` should run *outside* (first applied, last executed) and `dec2` *inside*.
 
-- [ ] The top one
-- [x] The one closest to the function definition (bottom one)
-- [ ] Random order
-- [ ] Parallel
+> Type: code
+> Language: python
+> Starting Code:
+def dec1(f): return lambda: "1" + f()
+def dec2(f): return lambda: "2" + f()
 
-> Hint: Think of it as f(g(x)).
-> Explanation: Decorators are applied from bottom to top (inner to outer).
+# Apply decorators
+def greet():
+    return "Hello"
+> Verification Code:
+# If dec1 is top/outer: dec1(dec2(greet)) -> "1" + "2" + "Hello"
+val = greet()
+if val == "12Hello":
+    print("Correct!")
+else:
+    print(f"Got {val}")
+> Expected Output: Correct!
 
-## Question 5: Arguments in Decorators
-How do you handle arbitrary arguments in a wrapper function?
+## Question 5: Handling Arguments
+Update the wrapper to accept any positional arguments (`*args`) and pass them to `func`.
 
-- [ ] Use a list
-- [ ] Use explicit arguments
-- [x] Use *args and **kwargs
-- [ ] Use the `arguments` keyword
-
-> Hint: This captures any positional or keyword arguments.
-> Explanation: `*args` and `**kwargs` allow the wrapper to accept any signature.
+> Type: code
+> Language: python
+> Starting Code:
+def pass_args(func):
+    def wrapper(): # Update arguments
+        return func() # Update arguments
+    return wrapper
+> Verification Code:
+@pass_args
+def add(a, b): return a + b
+assert add(2, 3) == 5
+print("Correct!")
+> Expected Output: Correct!
 
 ## Question 6: Simple Logger
 Write a decorator `log_execution` that prints "Executing" before running the function.
@@ -67,16 +110,26 @@ Write a decorator `log_execution` that prints "Executing" before running the fun
 > Language: python
 > Starting Code:
 def log_execution(func):
-    def wrapper():
-        # Print "Executing" here
-        func()
-    return wrapper
+    # Define wrapper
+    pass
 > Verification Code:
+import sys
+from io import StringIO
+old_stdout = sys.stdout
+sys.stdout = mystdout = StringIO()
+
 @log_execution
 def hello():
     print("Hello")
 
 hello()
-> Expected Output:
-Executing
-Hello
+
+sys.stdout = old_stdout
+output = mystdout.getvalue().strip()
+# Expecting "Executing" then "Hello"
+lines = output.split('\n')
+if len(lines) >= 2 and "Executing" in lines[0] and "Hello" in lines[1]:
+    print("Correct!")
+else:
+    print(f"Output was: {output}")
+> Expected Output: Correct!

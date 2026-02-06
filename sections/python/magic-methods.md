@@ -5,71 +5,125 @@ order: 5
 difficulty: "Advanced"
 ---
 
-## Question 1: Initialization
-Which method is automatically called when a new object is created?
-
-- [ ] __create__
-- [ ] __new__
-- [x] __init__
-- [ ] __start__
-
-> Hint: It initializes the object's state.
-> Explanation: `__init__` is the constructor method in Python. `__new__` creates the instance, but `__init__` initializes it.
-
-## Question 2: String Representation
-Which method returns a human-readable string representation of an object?
-
-- [ ] __repr__
-- [ ] __string__
-- [ ] __text__
-- [x] __str__
-
-> Hint: This is what `print(obj)` uses.
-> Explanation: `__str__` is intended to be readable. `__repr__` is intended to be unambiguous.
-
-## Question 3: Length Customization
-Which method allows an object to support the `len()` function?
-
-- [ ] __length__
-- [ ] __size__
-- [x] __len__
-- [ ] __count__
-
-> Hint: It should return an integer.
-> Explanation: Implementing `__len__` allows you to use `len(my_object)`.
-
-## Question 4: Arithmetic Operations
-which method allows you to define behavior for the `+` operator?
-
-- [ ] __addition__
-- [ ] __plus__
-- [x] __add__
-- [ ] __sum__
-
-> Hint: Think of "add".
-> Explanation: `__add__` defines behavior for `+`.
-
-## Question 5: Item Access
-Which method allows you to access items using square bracket notation `obj[key]`?
-
-- [ ] __get__
-- [ ] __access__
-- [x] __getitem__
-- [ ] __index__
-
-> Hint: You are "getting an item".
-> Explanation: `__getitem__` is used for indexing/lookup.
-
-## Question 6: Custom String Output
-Create a class `Person` that accepts a `name` in `__init__` and returns that name when `str()` is called on the instance.
+## Question 1: Initialization (__init__)
+Define a class `Person` with an `__init__` method that assigns the argument `name` to `self.name`.
 
 > Type: code
 > Language: python
 > Starting Code:
 class Person:
     def __init__(self, name):
+        # Assign self.name
         pass
 > Verification Code:
 p = Person("Alice")
-print(str(p))
-> Expected Output: Alice
+assert p.name == "Alice"
+print("Correct!")
+> Expected Output: Correct!
+
+## Question 2: String Representation (__str__)
+Define a `__str__` method for `Person` that returns the string "Person: [name]".
+
+> Type: code
+> Language: python
+> Starting Code:
+class Person:
+    def __init__(self, name):
+        self.name = name
+    
+    def __str__(self):
+        # Return formatted string
+        pass
+> Verification Code:
+p = Person("Bob")
+assert str(p) == "Person: Bob"
+print("Correct!")
+> Expected Output: Correct!
+
+## Question 3: Length (__len__)
+Define a class `Container` with a list `items`. Implement `__len__` to return the number of items.
+
+> Type: code
+> Language: python
+> Starting Code:
+class Container:
+    def __init__(self, items):
+        self.items = items
+    
+    def __len__(self):
+        # Return length of self.items
+        pass
+> Verification Code:
+c = Container([1, 2, 3])
+assert len(c) == 3
+print("Correct!")
+> Expected Output: Correct!
+
+## Question 4: Addition (__add__)
+Define a class `Point` with `x` and `y`. Implement `__add__` to return a new `Point` that is the sum of two points (add x's and y's).
+
+> Type: code
+> Language: python
+> Starting Code:
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+    
+    def __add__(self, other):
+        # Return new Point
+        pass
+> Verification Code:
+p1 = Point(1, 2)
+p2 = Point(3, 4)
+p3 = p1 + p2
+assert p3.x == 4 and p3.y == 6
+print("Correct!")
+> Expected Output: Correct!
+
+## Question 5: Item Access (__getitem__)
+Define a class `Wrapper` that holds a list `data`. Implement `__getitem__` to allow indexing `wrapper[index]`.
+
+> Type: code
+> Language: python
+> Starting Code:
+class Wrapper:
+    def __init__(self, data):
+        self.data = data
+    
+    def __getitem__(self, index):
+        # Return item from self.data
+        pass
+> Verification Code:
+w = Wrapper(['a', 'b', 'c'])
+assert w[1] == 'b'
+print("Correct!")
+> Expected Output: Correct!
+
+## Question 6: Complete Class
+Create a class `Counter` that starts at 0. Implement `__add__` to add an integer to the counter, and `__str__` to return the current count as a string.
+
+> Type: code
+> Language: python
+> Starting Code:
+class Counter:
+    def __init__(self):
+        self.count = 0
+    
+    # Implement __add__ (handle: self + int)
+    # Note: normally __add__ returns a new object, but here let's just increment self.count? 
+    # Actually standard __add__ returns new. Let's make it mutable add (+=) or just return new?
+    # Let's say: return NEW Counter with sum.
+    def __add__(self, other):
+        pass
+
+    def __str__(self):
+        pass
+> Verification Code:
+c1 = Counter()
+c2 = c1 + 5
+assert c2.count == 5
+assert c1.count == 0 "Should be immutable add for this exercise"
+assert str(c2) == "5"
+print("Correct!")
+> Expected Output: Correct!
