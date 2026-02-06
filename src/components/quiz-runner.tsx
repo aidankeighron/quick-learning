@@ -161,7 +161,7 @@ export function QuizRunner({ quiz, persistenceKey }: QuizRunnerProps) {
               <RefreshCw className="mr-2 h-4 w-4" /> Restart Quiz
             </Button>
             <Link href="/">
-              <Button onClick={() => sessionStorage.removeItem(`quiz-state-${persistenceKey}`)}>Back to Sections</Button>
+              <Button>Back to Sections</Button>
             </Link>
           </CardFooter>
         </Card>
