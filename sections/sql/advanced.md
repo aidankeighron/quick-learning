@@ -5,65 +5,92 @@ order: 4
 difficulty: "Advanced"
 ---
 
-## Question 1: Subquery Concept
-What is a subquery?
-
-- [ ] A query that substitutes another
-- [x] A query nested inside another query
-- [ ] A query that runs on a submarine
-- [ ] A backup query
-
-> Hint: Also known as an inner query.
-> Explanation: A subquery is embedded within the WHERE or HAVING clause of another SQL query.
-
-## Question 2: CTE Syntax
-What does CTE stand for?
-
-- [ ] Common Table Entry
-- [x] Common Table Expression
-- [ ] Complex Table Entity
-- [ ] Computed Temporary Element
-
-> Hint: Defined with the `WITH` keyword.
-> Explanation: A CTE is a temporary result set that you can reference within another SELECT, INSERT, UPDATE, or DELETE statement.
-
-## Question 3: Union Operator
-Which operator is used to combine the result-set of two or more SELECT statements?
-
-- [ ] JOIN
-- [ ] MERGE
-- [x] UNION
-- [ ] COMBINE
-
-> Hint: Stacks results vertically.
-> Explanation: `UNION` combines results from multiple queries. `UNION ALL` includes duplicates.
-
-## Question 4: Window Functions (Concept)
-What distinguishes a Window Function from an Aggregate Function?
-
-- [ ] Window functions work on windows OS
-- [ ] Window functions collapse rows into one
-- [x] Window functions perform calculations across a set of rows without grouping them
-- [ ] No difference
-
-> Hint: `OVER()` clause.
-> Explanation: Window functions (like `RANK`, `ROW_NUMBER`) calculate values for each row based on a "window" of related rows, unlike `GROUP BY` which collapses rows.
-
-## Question 5: Exists Operator
-What does the `EXISTS` operator check for?
-
-- [ ] If a table exists
-- [x] If a subquery returns any records
-- [ ] If a column is not null
-- [ ] If a variable is defined
-
-> Hint: Returns TRUE or FALSE.
-> Explanation: `EXISTS` tests for the existence of any record in a subquery.
-
-## Question 6: CTE Challenge
-Use a CTE query to find the expensive products.
-Define a CTE named `ExpensiveItems` that selects all columns from `Products` where `price` > 500. Then `SELECT * FROM ExpensiveItems`.
+## Question 1: Subquery Filtering
+Find all products that have a price greater than the average price of all products. Use a subquery.
 
 > Type: code
 > Language: sql
-> Expected Output: 
+> Starting Code:
+-- Select products > avg price
+> Verification Code:
+SELECT * FROM Products WHERE price > (SELECT AVG(price) FROM Products);
+> Expected Output:
+1 | Laptop | ...
+2 | Smartphone | ...
+
+## Question 2: Simple CTE
+Use a Common Table Expression (CTE) named `ExpensiveItems` to select products with price > 500. Then select everything from that CTE.
+
+> Type: code
+> Language: sql
+> Starting Code:
+WITH ExpensiveItems AS (
+    -- Your query here
+)
+SELECT * FROM ExpensiveItems;
+> Verification Code:
+WITH ExpensiveItems AS (SELECT * FROM Products WHERE price > 500) SELECT * FROM ExpensiveItems;
+> Expected Output:
+1 | Laptop | ...
+2 | Smartphone | ...
+
+## Question 3: Union Operator
+Create a list of all names from both `Users` and `Products`. Use `UNION` to combine the queries.
+
+> Type: code
+> Language: sql
+> Starting Code:
+-- Select name from Users ...
+> Verification Code:
+SELECT name FROM Users UNION SELECT name FROM Products;
+> Expected Output:
+Alice Smith
+Bob Jones
+...
+Laptop
+Smartphone
+...
+
+## Question 4: Exists Operator
+Select the names of users who have placed at least one order. Use `EXISTS`.
+
+> Type: code
+> Language: sql
+> Starting Code:
+-- Select user names who have orders
+> Verification Code:
+SELECT name FROM Users WHERE EXISTS (SELECT 1 FROM Orders WHERE Orders.user_id = Users.id);
+> Expected Output:
+Alice Smith
+Bob Jones
+Charlie Brown
+Evan Wright
+
+## Question 5: Window Function (Rank)
+Rank products by price (highest first) using `RANK() OVER (...)`.
+
+> Type: code
+> Language: sql
+> Starting Code:
+-- Rank products by price
+> Verification Code:
+SELECT name, price, RANK() OVER (ORDER BY price DESC) as rank FROM Products;
+> Expected Output:
+Laptop | 999.99 | 1
+Smartphone | 699.99 | 2
+...
+
+## Question 6: Case Statement
+Select the product name and a new column `CategoryPrice` that is 'High' if price > 500, else 'Low'.
+
+> Type: code
+> Language: sql
+> Starting Code:
+-- Select name, CASE ...
+> Verification Code:
+SELECT name, CASE WHEN price > 500 THEN 'High' ELSE 'Low' END as CategoryPrice FROM Products;
+> Expected Output:
+Laptop | High
+Smartphone | High
+Desk Chair | Low
+... 
