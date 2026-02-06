@@ -189,17 +189,17 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
         
         if (!hasTypeAnnotations && !code.includes("//skip-ts-check")) {
           setError(
-            "⚠️ TypeScript Validation Failed: Your code doesn't use any type annotations!\\n\\n" +
-            "TypeScript requires type annotations like:\\n" +
-            "  • const age: number = 25\\n" +
-            "  • function add(a: number, b: number): number { }\\n" +
-            "  • interface User { id: number }\\n\\n" +
+            "⚠️ TypeScript Validation Failed: Your code doesn't use any type annotations!\n\n" +
+            "TypeScript requires type annotations like:\n" +
+            "  • const age: number = 25\n" +
+            "  • function add(a: number, b: number): number { }\n" +
+            "  • interface User { id: number }\n\n" +
             "Plain JavaScript won't pass TypeScript challenges."
           );
           return;
         }
         
-        const fullCode = code + (hiddenSuffixCode ? "\\n" + hiddenSuffixCode : "");
+        const fullCode = code + (hiddenSuffixCode ? "\n" + hiddenSuffixCode : "");
         const ts = await import("typescript");
         let jsCode: string;
         
@@ -232,7 +232,7 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
           console.log = originalLog;
         }
 
-        result = logs.join("\\n");
+        result = logs.join("\n");
       } else if (language === "python") {
         const codeToRun = code + (hiddenSuffixCode ? "\n" + hiddenSuffixCode : "");
         try {
