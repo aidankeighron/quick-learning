@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { type Quiz } from "@/lib/content";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,9 +12,10 @@ import { CodeRunner } from "./code-runner";
 
 type QuizRunnerProps = {
   quiz: Quiz;
+  persistenceKey: string;
 };
 
-export function QuizRunner({ quiz }: QuizRunnerProps) {
+export function QuizRunner({ quiz, persistenceKey }: QuizRunnerProps) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOptionIndex, setSelectedOptionIndex] = useState<number | null>(null);
   const [status, setStatus] = useState<'idle' | 'correct' | 'incorrect'>('idle');
@@ -22,6 +23,39 @@ export function QuizRunner({ quiz }: QuizRunnerProps) {
   const [history, setHistory] = useState<boolean[]>([]);
   const [codeOutput, setCodeOutput] = useState("");
   const [hasAttempted, setHasAttempted] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Load from session storage
+  useEffect(() => {
+    const saved = sessionStorage.getItem(`quiz-state-${persistenceKey}`);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.version === 1) { // Simple versioning
+            setCurrentQuestionIndex(parsed.currentQuestionIndex);
+            setScore(parsed.score);
+            setHistory(parsed.history);
+            // We don't necessarily restore selectedOption or status to keep it clean, 
+            // or we could. Let's start fresh on the saved question.
+        }
+      } catch (e) {
+        console.error("Failed to load quiz state", e);
+      }
+    }
+    setIsLoaded(true);
+  }, [persistenceKey]);
+
+  // Save to session storage
+  useEffect(() => {
+    if (!isLoaded) return;
+    const state = {
+        version: 1,
+        currentQuestionIndex,
+        score,
+        history
+    };
+    sessionStorage.setItem(`quiz-state-${persistenceKey}`, JSON.stringify(state));
+  }, [currentQuestionIndex, score, history, persistenceKey, isLoaded]);
 
   const currentQuestion = quiz.questions[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === quiz.questions.length - 1;
@@ -92,7 +126,12 @@ export function QuizRunner({ quiz }: QuizRunnerProps) {
     setScore({ correct: 0, wrong: 0, skipped: 0 });
     setHistory([]);
     setHasAttempted(false);
+    sessionStorage.removeItem(`quiz-state-${persistenceKey}`);
   };
+
+  if (!isLoaded) {
+      return <div className="p-8 text-center text-muted-foreground">Loading progress...</div>;
+  }
 
   if (isFinished) {
     const accuracy = Math.round((score.correct / quiz.questions.length) * 100);
@@ -122,7 +161,7 @@ export function QuizRunner({ quiz }: QuizRunnerProps) {
               <RefreshCw className="mr-2 h-4 w-4" /> Restart Quiz
             </Button>
             <Link href="/">
-              <Button>Back to Sections</Button>
+              <Button onClick={() => sessionStorage.removeItem(`quiz-state-${persistenceKey}`)}>Back to Sections</Button>
             </Link>
           </CardFooter>
         </Card>

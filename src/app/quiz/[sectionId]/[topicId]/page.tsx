@@ -36,7 +36,7 @@ export default async function QuizPage({ params }: Props) {
            </h1>
            <p className="text-muted-foreground">{quiz.description}</p>
        </div>
-       <QuizRunner quiz={quiz} />
+       <QuizRunner quiz={quiz} persistenceKey={`${sectionId}-${topicId}`} />
     </main>
   );
 }
