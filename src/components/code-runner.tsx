@@ -69,8 +69,33 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
             // Capture stdout
             pyodide.setStdout({ batched: (msg: string) => { result += msg + "\n"; } });
             
-            await pyodide.runPythonAsync(codeToRun);
+            // Pass code string safely
+            pyodide.globals.set("full_code_to_run", codeToRun);
+
+            // Execute via a wrapper script to catch assertions
+            const wrapperScript = `
+import traceback
+try:
+    # Execute in the global namespace to allow function definitions to persist/be usable if needed
+    # matching standard "script" behavior.
+    exec(full_code_to_run, globals())
+except AssertionError as e:
+    msg = str(e)
+    if not msg:
+        msg = "Assertion failed"
+    print(f"[TEST FAILED] {msg}")
+except Exception:
+    # Print full traceback for other errors
+    traceback.print_exc()
+`;
+            await pyodide.runPythonAsync(wrapperScript);
+
+            if (!result.trim()) {
+                result = "[Code Executed Successfully]";
+            }
         } catch (e: any) {
+            // This catch handles Pyodide loading errors or fatal crashes in runPythonAsync
+            // The python-side try/except handles the user code errors.
             throw e;
         }
       } else {

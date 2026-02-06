@@ -15,7 +15,8 @@ def simple_gen():
     # Your code here
     pass
 > Verification Code:
-assert list(simple_gen()) == [1, 2, 3]
+vals = list(simple_gen())
+assert vals == [1, 2, 3], f"Expected [1, 2, 3], but got {vals}"
 print("Correct!")
 > Expected Output: Correct!
 
@@ -29,8 +30,8 @@ def count_to(n):
     # Your code here
     pass
 > Verification Code:
-assert list(count_to(3)) == [1, 2, 3]
-assert list(count_to(1)) == [1]
+assert list(count_to(3)) == [1, 2, 3], "count_to(3) should yield [1, 2, 3]"
+assert list(count_to(1)) == [1], "count_to(1) should yield [1]"
 print("Correct!")
 > Expected Output: Correct!
 
@@ -51,9 +52,10 @@ try:
     if first_val == "Start":
         print("Correct!")
     else:
-        print(f"Got {first_val}")
+        # This will be caught as a test failure now
+        raise AssertionError(f"Expected 'Start', got {first_val}")
 except NameError:
-    print("first_val not defined")
+    raise AssertionError("Variable 'first_val' not defined")
 > Expected Output: Correct!
 
 ## Question 4: Generator Expressions
@@ -65,8 +67,9 @@ Create a generator expression named `squares` that yields the square of numbers 
 # squares = ...
 > Verification Code:
 import types
-assert isinstance(squares, types.GeneratorType), "Must be a generator"
-assert list(squares) == [0, 1, 4, 9, 16]
+assert isinstance(squares, types.GeneratorType), "squares must be a generator (use parentheses)"
+vals = list(squares)
+assert vals == [0, 1, 4, 9, 16], f"Expected [0, 1, 4, 9, 16], but got {vals}"
 print("Correct!")
 > Expected Output: Correct!
 
@@ -80,7 +83,8 @@ def sub_gen():
     # Use yield from
     pass
 > Verification Code:
-assert list(sub_gen()) == [0, 1, 2]
+vals = list(sub_gen())
+assert vals == [0, 1, 2], f"Expected [0, 1, 2], got {vals}"
 print("Correct!")
 > Expected Output: Correct!
 
@@ -95,6 +99,8 @@ def fibonacci(limit):
     # Your code here
     pass
 > Verification Code:
-assert list(fibonacci(10)) == [0, 1, 1, 2, 3, 5, 8]
+vals = list(fibonacci(10))
+expected = [0, 1, 1, 2, 3, 5, 8]
+assert vals == expected, f"For limit 10, expected {expected}, got {vals}"
 print("Correct!")
 > Expected Output: Correct! 

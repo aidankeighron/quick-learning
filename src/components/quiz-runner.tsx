@@ -65,11 +65,12 @@ export function QuizRunner({ quiz }: QuizRunnerProps) {
                  isCorrect = false;
              }
         } else {
-            // Python/JS simple check
-            // For complex Python output, we might want similar markers later.
-            // But for now, keep exact string match or 'Correct!' check
+            // Python/JS check
             if (actual.includes("Correct!") || actual === expected) {
                 isCorrect = true;
+            } else if (actual.includes("[TEST FAILED]")) {
+                isCorrect = false;
+                // We'll let the Feedback UI extract the message
             }
         }
 
