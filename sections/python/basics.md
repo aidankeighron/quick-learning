@@ -6,10 +6,10 @@ description: "Introduction to variables and types."
 ## Question 1: Variable Assignment
 What is the correct way to assign a value to a variable in Python?
 
-- [x] `x = 5`
-- [ ] `int x = 5;`
-- [ ] `let x = 5`
-- [ ] `var x = 5`
+- [x] x = 5
+- [ ] int x = 5;
+- [ ] let x = 5
+- [ ] var x = 5
 
 > Hint: Python is dynamically typed.
 > Explanation: Python uses the `=` operator for assignment and does not require type declaration.

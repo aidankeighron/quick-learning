@@ -9,7 +9,7 @@ import "prismjs/components/prism-python";
 import "prismjs/components/prism-sql";
 import "prismjs/themes/prism-tomorrow.css"; // Dark theme
 import { Button } from "./ui/button";
-import { Play } from "lucide-react";
+import { Play, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type CodeRunnerProps = {
@@ -29,10 +29,12 @@ export function CodeRunner({ language, onOutput, className }: CodeRunnerProps) {
   
   const [output, setOutput] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const runCode = useCallback(async () => {
     setOutput("");
     setError("");
+    setIsLoading(true);
     let result = "";
 
     try {
@@ -54,22 +56,32 @@ export function CodeRunner({ language, onOutput, className }: CodeRunnerProps) {
         }
         
         result = logs.join("\n");
-      } else {
-        // Simulation for Python/SQL (placeholder)
-        // In a real app, use Pyodide or SQL.js or server-side execution
-        result = "Simulation: Execution successful.\n(Real execution requires web-assembly modules not loaded in this demo)\n";
-        
-        // Simple mock for "print('Hello')"
-        if (language === "python" && code.includes("print") && code.includes("Hello")) {
-             result = "Hello";
+      } else if (language === "python") {
+        try {
+            const { loadPyodide } = await import("@/lib/pyodide");
+            const pyodide = await loadPyodide();
+            if (!pyodide) throw new Error("Failed to load Python environment.");
+
+            // Capture stdout
+            pyodide.setStdout({ batched: (msg: string) => { result += msg + "\n"; } });
+            
+            await pyodide.runPythonAsync(code);
+            // Result is accumulated in 'result' via stdout callback
+        } catch (e: any) {
+            throw e;
         }
+      } else {
+        // Simulation for SQL (placeholder)
+        result = "Simulation: Execution successful.\n(Real execution requires SQL.js which is not yet integrated)\n";
       }
 
       setOutput(result);
       onOutput(result);
     } catch (err: any) {
       setError(err.message);
-      onOutput("Error: " + err.message);
+      onOutput(""); // Clear output on error? Or keep partial?
+    } finally {
+      setIsLoading(false);
     }
   }, [code, language, onOutput]);
 
@@ -77,8 +89,9 @@ export function CodeRunner({ language, onOutput, className }: CodeRunnerProps) {
     <div className={cn("border rounded-md overflow-hidden bg-[#1d1f21]", className)}>
       <div className="flex justify-between items-center bg-[#25282c] p-2 border-b border-border/20">
          <span className="text-xs text-muted-foreground uppercase font-mono ml-2">{language}</span>
-         <Button size="sm" onClick={runCode} className="h-7 text-xs">
-           <Play className="mr-1 h-3 w-3" /> Run
+         <Button size="sm" onClick={runCode} disabled={isLoading} className="h-7 text-xs">
+           {isLoading ? <Loader2 className="mr-1 h-3 w-3 animate-spin" /> : <Play className="mr-1 h-3 w-3" />}
+           {isLoading ? "Running..." : "Run"}
          </Button>
       </div>
       <div className="max-h-[300px] overflow-auto font-mono text-sm relative">
