@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
@@ -162,7 +164,7 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
             ${hiddenSuffixCode}
         ` : "";
         
-        let codeToRun = code + "\n" + verificationPart;
+        const codeToRun = code + "\n" + verificationPart;
 
         try {
           // eslint-disable-next-line no-new-func
@@ -273,7 +275,7 @@ except Exception:
             throw e;
         }
       } else if (language === "java") {
-        if (!window.cheerpjInit || !window.cheerpjRunMain || !window.cheerpjFileWrite) {
+        if (!window.cheerpjInit || !window.cheerpjRunMain || !window.cheerpjFileRead) {
              throw new Error("Java Runtime not initialized.");
         }
 
@@ -290,7 +292,7 @@ except Exception:
         };
 
         try {
-            await window.cheerpjFileWrite("/str/Main.java", code);
+            await window.cheerpjFileRead("/str/Main.java", code);
             const compileExitCode = await window.cheerpjRunMain("com.sun.tools.javac.Main", "/str/Main.java");
             
             if (compileExitCode !== 0) {
