@@ -41,13 +41,28 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
 
     try {
       if (language === "javascript") {
-        const codeToRun = code + (hiddenSuffixCode ? "\n" + hiddenSuffixCode : "");
         // Capture console.log
         const logs: string[] = [];
         const originalLog = console.log;
         console.log = (...args) => {
           logs.push(args.map(a => String(a)).join(" "));
         };
+        // Expose logs for verification code
+        (console as any)._logs = logs;
+        Object.defineProperty(console, 'output', {
+            get: () => logs.join("\n"),
+            configurable: true
+        });
+
+        // Inject 'output' variable for synchronous checks
+        // Use concatenation to avoid issues if 'code' contains backticks
+        const verificationPart = hiddenSuffixCode ? `
+            // Snapshot output for synchronous checks
+            var output = console.output; 
+            ${hiddenSuffixCode}
+        ` : "";
+        
+        const codeToRun = code + "\n" + verificationPart;
 
         try {
           // eslint-disable-next-line no-new-func
@@ -56,6 +71,9 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
           throw e;
         } finally {
           console.log = originalLog;
+          delete (console as any)._logs;
+          // @ts-ignore
+          delete console.output;
         }
         
         result = logs.join("\n");

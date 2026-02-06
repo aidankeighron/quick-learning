@@ -50,22 +50,15 @@ Use `.then()` to handle the result of promise `p` and log it.
 const p = Promise.resolve("Data");
 // p.then(...)
 > Verification Code:
-// We intercept console.log
-// Since this is async, the CodeRunner might finish before this runs if not handled carefully.
-// However, standard microtasks run before next macrotask.
 p.then(d => console.log(d));
 
-// Wait a tick
+// Wait a tick for the log to happen
 setTimeout(() => {
-    if (!output.includes("Data")) {
-        // This check is tricky in synchronous validation flow. 
-        // For this simple runner, we might need to rely on the user code executing immediately 
-        // or just syntax check.
-        // Actually, CodeRunner captures async logs if the window stays open? 
-        // Let's print "Correct!" inside the then block if we were testing, but here we 
-        // rely on the user's log.
-        console.log("Correct!"); 
+    // Check dynamic output
+    if (!console.output.includes("Data")) {
+        throw new Error("Expected output to contain 'Data'");
     }
+    console.log("Correct!"); 
 }, 10);
 > Expected Output: Data
 
