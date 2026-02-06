@@ -33,7 +33,7 @@ Write code to log the string "Hello World" to the console.
 > Verification Code:
 // Logic handled by console interception in CodeRunner
 if (!output.includes("Hello World")) {
-    throw new Error("Expected output to contain 'Hello World'");
+    throw new Error(`Expected output to contain 'Hello World', but got: "${output.trim()}"`);
 }
 console.log("Correct!");
 > Expected Output: Hello World

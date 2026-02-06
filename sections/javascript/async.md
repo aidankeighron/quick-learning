@@ -56,7 +56,7 @@ p.then(d => console.log(d));
 setTimeout(() => {
     // Check dynamic output
     if (!console.output.includes("Data")) {
-        throw new Error("Expected output to contain 'Data'");
+        throw new Error(`Expected output to contain 'Data', but got: "${console.output.trim()}"`);
     }
     console.log("Correct!"); 
 }, 10);
