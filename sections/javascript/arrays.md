@@ -8,6 +8,7 @@ difficulty: "Intermediate"
 ## Question 1: Accessing Elements
 How do you access the first element of an array named `arr`?
 
+> Link: https://www.w3schools.com/js/js_arrays.asp
 > Type: multiple-choice
 - [ ] `arr.first()`
 - [ ] `arr[1]`
@@ -17,6 +18,7 @@ How do you access the first element of an array named `arr`?
 ## Question 2: Array Length
 Which property gives the number of elements in an array?
 
+> Link: https://www.w3schools.com/js/js_arrays.asp
 > Type: multiple-choice
 - [ ] size
 - [x] length
@@ -26,6 +28,7 @@ Which property gives the number of elements in an array?
 ## Question 3: Array Creation
 Create an array named `colors` containing the strings "red", "green", and "blue".
 
+> Link: https://www.w3schools.com/js/js_arrays.asp
 > Type: code
 > Language: javascript
 > Starting Code:
@@ -40,6 +43,7 @@ console.log("Correct!");
 ## Question 4: Adding Elements
 Add "yellow" to the end of the `colors` array.
 
+> Link: https://www.w3schools.com/js/js_array_methods.asp
 > Type: code
 > Language: javascript
 > Starting Code:
@@ -54,6 +58,7 @@ console.log("Correct!");
 ## Question 5: Map Method
 What does the `map()` method do?
 
+> Link: https://www.w3schools.com/js/js_array_iteration.asp
 > Type: multiple-choice
 - [ ] Filters the array
 - [x] Creates a new array by applying a function to every element
@@ -63,6 +68,7 @@ What does the `map()` method do?
 ## Question 6: Filter Method
 What does `filter()` return if no elements match the condition?
 
+> Link: https://www.w3schools.com/js/js_array_iteration.asp
 > Type: multiple-choice
 - [ ] null
 - [ ] undefined
@@ -72,6 +78,7 @@ What does `filter()` return if no elements match the condition?
 ## Question 7: Map Usage
 Use `.map()` to create a new array `doubled` where each number in `nums` is multiplied by 2.
 
+> Link: https://www.w3schools.com/js/js_array_iteration.asp
 > Type: code
 > Language: javascript
 > Starting Code:
@@ -86,6 +93,7 @@ console.log("Correct!");
 ## Question 8: Filter Usage
 Use `.filter()` to create an array `evens` containing only the even numbers from `nums`.
 
+> Link: https://www.w3schools.com/js/js_array_iteration.asp
 > Type: code
 > Language: javascript
 > Starting Code:
@@ -101,6 +109,7 @@ console.log("Correct!");
 ## Question 9: Find Method
 Use `.find()` to retrieve the first number greater than 10 from `nums` and assign it to `found`.
 
+> Link: https://www.w3schools.com/js/js_array_iteration.asp
 > Type: code
 > Language: javascript
 > Starting Code:
@@ -114,6 +123,7 @@ console.log("Correct!");
 ## Question 10: Reduce Usage
 Use `.reduce()` to calculate the sum of all numbers in `nums` and assign it to `sum`.
 
+> Link: https://www.w3schools.com/js/js_array_iteration.asp
 > Type: code
 > Language: javascript
 > Starting Code:

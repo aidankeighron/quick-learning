@@ -126,4 +126,4 @@ SELECT * FROM Users;
     *   *Python*: Hidden code that runs after user code. Use `assert`.
     *   *SQL*: Hidden correct query to compare results against.
 - **Expected Output**: String shown to user as the target output.
-- **Link**: `> Link: [url]` (Optional) - URL to a relevant resource (e.g., W3Schools) shown in the question header.
+- **Link**: `> Link: [url]` (Optional) - URL to a relevant resource (e.g., W3Schools) shown in the question header. Try to find a W3Schools link but if you can't find one, find a link to a relevant resource. Prioritize the official documentation of the language and accuracy. For example for Python magic methods don't just link to a page on methods, link to a page on magic methods.

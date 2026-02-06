@@ -8,6 +8,7 @@ difficulty: "Intermediate"
 ## Question 1: Object Literal
 Which syntax creates an empty object?
 
+> Link: https://www.w3schools.com/js/js_objects.asp
 > Type: multiple-choice
 - [ ] `[]`
 - [ ] `()`
@@ -17,6 +18,7 @@ Which syntax creates an empty object?
 ## Question 2: Accessing Properties
 If you have an object `user = { name: "Alice" }`, how can you access `name`?
 
+> Link: https://www.w3schools.com/js/js_object_properties.asp
 > Type: multiple-choice
 - [x] `user.name`
 - [ ] `user->name`
@@ -26,6 +28,7 @@ If you have an object `user = { name: "Alice" }`, how can you access `name`?
 ## Question 3: Creating an Object
 Create an object named `car` with properties `brand` set to "Toyota" and `year` set to 2020.
 
+> Link: https://www.w3schools.com/js/js_objects.asp
 > Type: code
 > Language: javascript
 > Starting Code:
@@ -40,6 +43,7 @@ console.log("Correct!");
 ## Question 4: Object Methods
 Add a method `honk` to the `car` object (from code, redefine it) that returns "Beep!".
 
+> Link: https://www.w3schools.com/js/js_object_methods.asp
 > Type: code
 > Language: javascript
 > Starting Code:
@@ -56,6 +60,7 @@ console.log("Correct!");
 ## Question 5: JSON
 What method converts a JavaScript object into a JSON string?
 
+> Link: https://www.w3schools.com/js/js_json_intro.asp
 > Type: multiple-choice
 - [ ] `JSON.parse()`
 - [ ] `JSON.toSTRING()`
@@ -65,6 +70,7 @@ What method converts a JavaScript object into a JSON string?
 ## Question 6: The 'this' Keyword
 In a method inside an object, what does `this` refers to?
 
+> Link: https://www.w3schools.com/js/js_this.asp
 > Type: multiple-choice
 - [ ] The global object
 - [ ] The function itself
@@ -74,6 +80,7 @@ In a method inside an object, what does `this` refers to?
 ## Question 7: Classes
 Define a class `Person` with a constructor that takes `name` and sets `this.name`.
 
+> Link: https://www.w3schools.com/js/js_classes.asp
 > Type: code
 > Language: javascript
 > Starting Code:
@@ -89,6 +96,7 @@ console.log("Correct!");
 ## Question 8: Class Methods
 Add a method `sayHello()` to `Person` (redefine class) that returns "Hello, I am [name]".
 
+> Link: https://www.w3schools.com/js/js_class_intro.asp
 > Type: code
 > Language: javascript
 > Starting Code:
@@ -105,6 +113,7 @@ console.log("Correct!");
 ## Question 9: Inheritance
 Create a class `Student` that extends `Person` and adds an `grade` property in the constructor.
 
+> Link: https://www.w3schools.com/js/js_class_inheritance.asp
 > Type: code
 > Language: javascript
 > Starting Code:
@@ -126,6 +135,7 @@ console.log("Correct!");
 ## Question 10: Static Methods
 Add a static method `species()` to `Person` that returns "Homo Sapiens".
 
+> Link: https://www.w3schools.com/js/js_class_static.asp
 > Type: code
 > Language: javascript
 > Starting Code:

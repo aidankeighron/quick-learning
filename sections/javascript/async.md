@@ -8,6 +8,7 @@ difficulty: "Advanced"
 ## Question 1: Blocking Code
 What does it mean for code to be "non-blocking"?
 
+> Link: https://www.w3schools.com/js/js_asynchronous.asp
 > Type: multiple-choice
 - [ ] It runs faster
 - [ ] It stops the program if an error occurs
@@ -17,6 +18,7 @@ What does it mean for code to be "non-blocking"?
 ## Question 2: Promise States
 Which is NOT a valid state of a Promise?
 
+> Link: https://www.w3schools.com/js/js_promise.asp
 > Type: multiple-choice
 - [ ] Pending
 - [ ] Fulfilled
@@ -26,6 +28,7 @@ Which is NOT a valid state of a Promise?
 ## Question 3: Creating a Promise
 Create a Promise named `p` that resolves immediately with the string "Success".
 
+> Link: https://www.w3schools.com/js/js_promise.asp
 > Type: code
 > Language: javascript
 > Starting Code:
@@ -44,6 +47,7 @@ p.then(val => {
 ## Question 4: Handling Promises
 Use `.then()` to handle the result of promise `p` and log it.
 
+> Link: https://www.w3schools.com/js/js_promise.asp
 > Type: code
 > Language: javascript
 > Starting Code:
@@ -65,6 +69,7 @@ setTimeout(() => {
 ## Question 5: Async Keyword
 What does the `async` keyword ensure a function returns?
 
+> Link: https://www.w3schools.com/js/js_async.asp
 > Type: multiple-choice
 - [ ] void
 - [x] A Promise
@@ -74,6 +79,7 @@ What does the `async` keyword ensure a function returns?
 ## Question 6: Await Keyword
 Where can the `await` keyword be used?
 
+> Link: https://www.w3schools.com/js/js_async.asp
 > Type: multiple-choice
 - [ ] Anywhere
 - [ ] Only in callbacks
@@ -83,6 +89,7 @@ Where can the `await` keyword be used?
 ## Question 7: Basic Async Function
 Write an `async` function `getData` that returns "Loaded".
 
+> Link: https://www.w3schools.com/js/js_async.asp
 > Type: code
 > Language: javascript
 > Starting Code:
@@ -98,6 +105,7 @@ getData().then(val => {
 ## Question 8: Using Await
 Inside the async function `run`, wait for `process()` and assign result to `res`.
 
+> Link: https://www.w3schools.com/js/js_async.asp
 > Type: code
 > Language: javascript
 > Starting Code:
@@ -117,6 +125,7 @@ run().then(val => {
 ## Question 9: Try/Catch Handling
 Wrap the await call in a try/catch block to handle errors.
 
+> Link: https://www.w3schools.com/js/js_async.asp
 > Type: code
 > Language: javascript
 > Starting Code:
@@ -134,6 +143,7 @@ safeRun().then(val => {
 ## Question 10: Parallel Execution
 Use `Promise.all` to run `p1` and `p2` simultaneously and return the results array.
 
+> Link: https://www.w3schools.com/js/js_promise.asp
 > Type: code
 > Language: javascript
 > Starting Code:

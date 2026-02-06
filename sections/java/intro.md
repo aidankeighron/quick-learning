@@ -8,6 +8,7 @@ difficulty: "Beginner"
 ## Question 1: Java Virtual Machine
 What is the role of the JVM?
 
+> Link: https://www.w3schools.com/java/java_intro.asp
 > Type: multiple-choice
 - [ ] Compiles source code to machine code
 - [x] Executes Java Bytecode
@@ -17,6 +18,7 @@ What is the role of the JVM?
 ## Question 2: Main Method
 In Java, what is the entry point of the application?
 
+> Link: https://www.w3schools.com/java/java_syntax.asp
 > Type: multiple-choice
 - [ ] start()
 - [ ] run()
@@ -27,6 +29,7 @@ In Java, what is the entry point of the application?
 This code runs a real Java compiler in your browser! 
 Complete the `main` method to print `"Hello Java"`.
 
+> Link: https://www.w3schools.com/java/java_output.asp
 > Type: code
 > Language: java
 > Starting Code:
@@ -45,6 +48,7 @@ console.log("Correct!");
 ## Question 4: Basic Math
 Modify the code to print the sum of 10 and 20.
 
+> Link: https://www.w3schools.com/java/java_variables.asp
 > Type: code
 > Language: java
 > Starting Code:

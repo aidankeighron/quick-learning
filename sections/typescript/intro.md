@@ -8,6 +8,7 @@ difficulty: "Beginner"
 ## Question 1: What is TypeScript?
 What is the relationship between TypeScript and JavaScript?
 
+> Link: https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html
 > Type: multiple-choice
 - [ ] TypeScript is a completely different language
 - [x] TypeScript is a superset of JavaScript
@@ -17,6 +18,7 @@ What is the relationship between TypeScript and JavaScript?
 ## Question 2: Type Annotation
 Which syntax correctly defines a variable `name` as a string?
 
+> Link: https://www.typescriptlang.org/docs/handbook/2/everyday-types.html
 > Type: multiple-choice
 - [ ] `var name = string`
 - [ ] `string name = "Alice"`
@@ -26,6 +28,7 @@ Which syntax correctly defines a variable `name` as a string?
 ## Question 3: Type Checking
 Declare a variable `age` of type `number` and assign it the value `25`.
 
+> Link: https://www.typescriptlang.org/docs/handbook/2/everyday-types.html
 > Type: code
 > Language: typescript
 > Starting Code:
@@ -41,6 +44,7 @@ console.log("Correct!");
 ## Question 4: Interfaces
 Define an interface `User` with a property `id` (number) and use it to type a constant `user`.
 
+> Link: https://www.typescriptlang.org/docs/handbook/2/objects.html
 > Type: code
 > Language: typescript
 > Starting Code:
@@ -59,6 +63,7 @@ console.log("Correct!");
 ## Question 5: Functions
 Write a function `add(a: number, b: number): number` that returns the sum.
 
+> Link: https://www.typescriptlang.org/docs/handbook/2/functions.html
 > Type: code
 > Language: typescript
 > Starting Code:

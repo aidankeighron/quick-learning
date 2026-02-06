@@ -8,6 +8,7 @@ difficulty: "Intermediate"
 ## Question 1: Feature
 What is a key feature of C++ that distinguishes it from C?
 
+> Link: https://www.w3schools.com/cpp/cpp_intro.asp
 > Type: multiple-choice
 - [ ] Garbage Collection
 - [x] Classes and Objects (OOP)
@@ -17,6 +18,7 @@ What is a key feature of C++ that distinguishes it from C?
 ## Question 2: Hello World
 This uses `clang` running in your browser via WebAssembly!
 
+> Link: https://www.w3schools.com/cpp/cpp_syntax.asp
 > Type: code
 > Language: cpp
 > Starting Code:
@@ -34,6 +36,7 @@ console.log("Correct!");
 ## Question 3: Simple Loop
 Write a loop that prints numbers 0 to 4 (newline separated).
 
+> Link: https://www.w3schools.com/cpp/cpp_for_loop.asp
 > Type: code
 > Language: cpp
 > Starting Code:
