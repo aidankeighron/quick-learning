@@ -37,47 +37,92 @@ Create markdown files for each topic within the section. The filename becomes th
 - URL: `/quiz/web-development/html-basics`
 
 ### Frontmatter
-Each topic file needs frontmatter:
+Each topic file needs frontmatter including `difficulty` and `order`:
 ```markdown
 ---
 title: "HTML Basics"
 description: "Understand the structure of the web."
+order: 1
+difficulty: "Beginner" 
 ---
 ```
+*Difficulty levels: "Beginner", "Intermediate", "Advanced".*
 
-### Questions Format
-Questions are defined using `## ` headers.
+### Content Guidelines (60/40 Split)
+We aim for a balance of practical coding experience and conceptual understanding.
+- **Ratio:** ~60% Code Challenges, ~40% Multiple Choice.
+- **Total Questions:** Target 10 questions per topic (6 Code, 4 MC).
+- **Ordering:**
+    - **Questions 1-2:** Introductory Multiple Choice (Conceptual).
+    - **Questions 3+:** Mix of Code Challenges and intermediate MCs.
+    - **Final Questions:** Advanced Code Challenges.
 
-#### Multiple Choice Question
+## Question Formats
+Questions are defined using `## ` headers (e.g., `## Question 1: Title`).
+
+### 1. Multiple Choice Question
+Used for testing concepts.
 ```markdown
 ## Question 1: What is HTML?
 What does HTML stand for?
 
+> Type: multiple-choice
 - [ ] Hyperlinks and Text Markup Language
 - [x] Hyper Text Markup Language
 - [ ] Home Tool Markup Language
 
-> Hint: It's the standard markup language for documents designed to be displayed in a web browser.
+> Hint: It's the standard markup language.
 > Explanation: HTML stands for Hyper Text Markup Language.
 ```
 
-#### Code Challenge Question
-For coding challenges, use specific blockquotes to define expectations.
-Supported languages: `python`, `javascript`, `sql`.
+### 2. Code Challenge (Python)
+requires `Starting Code` for the user and `Verification Code` to check the answer.
+
+**CRITICAL: Descriptive Error Messages**
+When writing verification code, always use `assert` statements with **descriptive error messages**. The user will see this message if their code fails.
 
 ```markdown
-## Question 2: Hello World
-Write a JavaScript code to log "Hello World" to the console.
+## Question 3: Sum Function
+Write a function `add(a, b)` that returns the sum of two numbers.
 
 > Type: code
-> Language: javascript
-> Expected Output: Hello World
+> Language: python
+> Starting Code:
+def add(a, b):
+    # Your code here
+    pass
+> Verification Code:
+# The user's code is executed first, so 'add' should be defined.
+assert add(2, 3) == 5, f"Expected add(2, 3) to be 5, but got {add(2, 3)}"
+assert add(10, -1) == 9, "Failed on negative numbers"
+print("Correct!")
+> Expected Output: Correct!
 ```
+*Note: If the code executes successfully with no output, the system automtically shows "Code Executed Successfully".*
 
-## Summary of Syntax
-- **Options**: `- [ ]` for incorrect, `- [x]` for correct.
-- **Hints**: `> Hint: Your hint here`
-- **Explanations**: `> Explanation: Your details here`
-- **Code Type**: `> Type: code`
-- **Code Language**: `> Language: [language]`
-- **Expected Output**: `> Expected Output: [string]`
+### 3. Code Challenge (SQL)
+For SQL, the Verification Code is the **Correct Answer Query**. The system runs both the user's query and your verification query and compares the results.
+
+```markdown
+## Question 4: Select All Users
+Select all columns from the `Users` table.
+
+> Type: code
+> Language: sql
+> Starting Code:
+-- Select all users
+> Verification Code:
+SELECT * FROM Users;
+> Expected Output:
+1 | Alice | ...
+```
+*(The Expected Output field for SQL is just for display/reference).*
+
+## Summary of Syntax Blocks
+- **Type**: `> Type: [code|multiple-choice]`
+- **Language**: `> Language: [python|sql|javascript]`
+- **Starting Code**: Code block shown to the user initially.
+- **Verification Code**:
+    *   *Python*: Hidden code that runs after user code. Use `assert`.
+    *   *SQL*: Hidden correct query to compare results against.
+- **Expected Output**: String shown to user as the target output.
