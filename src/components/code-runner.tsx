@@ -71,8 +71,85 @@ export function CodeRunner({ language, onOutput, className }: CodeRunnerProps) {
             throw e;
         }
       } else {
-        // Simulation for SQL (placeholder)
-        result = "Simulation: Execution successful.\n(Real execution requires SQL.js which is not yet integrated)\n";
+        try {
+            const { loadPyodide } = await import("@/lib/pyodide");
+            const pyodide = await loadPyodide();
+            if (!pyodide) throw new Error("Failed to load Python environment.");
+
+            // Capture stdout
+            pyodide.setStdout({ batched: (msg: string) => { result += msg + "\n"; } });
+
+            const seedScript = `
+import sqlite3
+
+def run_sql(query):
+    con = sqlite3.connect(":memory:")
+    cur = con.cursor()
+    
+    # Seed Data
+    cur.executescript("""
+    CREATE TABLE Users (id INTEGER PRIMARY KEY, name TEXT, email TEXT, country TEXT, join_date TEXT);
+    INSERT INTO Users VALUES (1, 'Alice Smith', 'alice@example.com', 'USA', '2023-01-15');
+    INSERT INTO Users VALUES (2, 'Bob Jones', 'bob@example.com', 'UK', '2023-02-20');
+    INSERT INTO Users VALUES (3, 'Charlie Brown', 'charlie@example.com', 'Canada', '2023-03-10');
+    INSERT INTO Users VALUES (4, 'Diana Prince', 'diana@example.com', 'USA', '2023-01-05');
+    INSERT INTO Users VALUES (5, 'Evan Wright', 'evan@example.com', 'Australia', '2023-04-12');
+
+    CREATE TABLE Orders (id INTEGER PRIMARY KEY, user_id INTEGER, amount DECIMAL(10, 2), status TEXT, order_date TEXT);
+    INSERT INTO Orders VALUES (101, 1, 150.50, 'Completed', '2023-05-01');
+    INSERT INTO Orders VALUES (102, 2, 89.99, 'Pending', '2023-05-03');
+    INSERT INTO Orders VALUES (103, 1, 45.00, 'Completed', '2023-05-05');
+    INSERT INTO Orders VALUES (104, 3, 200.00, 'Shipped', '2023-05-06');
+    INSERT INTO Orders VALUES (105, 5, 35.00, 'Cancelled', '2023-05-07');
+
+    CREATE TABLE Products (id INTEGER PRIMARY KEY, name TEXT, category TEXT, price DECIMAL(10, 2), stock INTEGER);
+    INSERT INTO Products VALUES (1, 'Laptop', 'Electronics', 999.99, 10);
+    INSERT INTO Products VALUES (2, 'Smartphone', 'Electronics', 699.99, 20);
+    INSERT INTO Products VALUES (3, 'Desk Chair', 'Furniture', 149.99, 15);
+    INSERT INTO Products VALUES (4, 'Coffee Table', 'Furniture', 89.99, 5);
+    INSERT INTO Products VALUES (5, 'Headphones', 'Electronics', 199.99, 30);
+    """)
+
+    try:
+        cur.execute(query)
+        
+        if query.strip().upper().startswith("SELECT") or query.strip().upper().startswith("WITH"):
+            col_names = [description[0] for description in cur.description]
+            rows = cur.fetchall()
+            
+            # Formatted Output
+            # Calculate column widths
+            widths = [len(c) for c in col_names]
+            for row in rows:
+                for i, val in enumerate(row):
+                    widths[i] = max(widths[i], len(str(val)))
+            
+            # Print Header
+            header = " | ".join(f"{col:<{w}}" for col, w in zip(col_names, widths))
+            print(header)
+            print("-" * len(header))
+            
+            # Print Rows
+            for row in rows:
+                print(" | ".join(f"{str(val):<{w}}" for val, w in zip(row, widths)))
+                
+        else:
+             print(f"Query executed successfully.")
+             if cur.rowcount > 0:
+                 print(f"Rows affected: {cur.rowcount}")
+
+    except Exception as e:
+        print(f"SQL Error: {e}")
+    finally:
+        con.close()
+
+run_sql("""${code.replace(/"/g, '\\"')}""")
+`;
+            
+            await pyodide.runPythonAsync(seedScript);
+        } catch (e: any) {
+            throw e;
+        }
       }
 
       setOutput(result);
