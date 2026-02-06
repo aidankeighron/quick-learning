@@ -18,22 +18,14 @@ import { cn } from "@/lib/utils";
 import { transform } from "sucrase";
 
 type CodeRunnerProps = {
-  language: "javascript" | "python" | "sql" | "typescript" | "java" | "c" | "cpp";
+  language: "javascript" | "python" | "sql" | "typescript";
   initialCode?: string;
   hiddenSuffixCode?: string;
   onOutput: (output: string) => void;
   className?: string;
 };
 
-// Global type definition for CheerpJ
-declare global {
-  interface Window {
-    cheerpjInit?: (options?: any) => Promise<void>;
-    cheerpjRunMain?: (main: string, ...args: string[]) => Promise<number>;
-    cheerpOSAddStringFile?: (path: string, content: string) => void;
-    cheerpjFileRead?: (path: string) => Promise<Uint8Array | null>;
-  }
-}
+
 
 export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, className }: CodeRunnerProps) {
   const [code, setCode] = useState(
@@ -43,97 +35,14 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
       ? "const msg: string = 'Hello World';\nconsole.log(msg);"
       : language === "python" 
       ? "print('Hello World')" 
-      : language === "java"
-      ? "public class Main {\n  public static void main(String[] args) {\n    System.out.println(\"Hello World\");\n  }\n}"
-      : (language === "c" || language === "cpp")
-      ? "#include <stdio.h>\n\nint main() {\n    printf(\"Hello World\\n\");\n    return 0;\n}"
+
       : "SELECT * FROM users;")
   );
   
   const [output, setOutput] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  
-  // Java State
-  const [javaReady, setJavaReady] = useState(false);
-  const [javaInitializing, setJavaInitializing] = useState(false);
-  
-  // Wasmer State
-  const [wasmerReady, setWasmerReady] = useState(false);
-  const [wasmerInitializing, setWasmerInitializing] = useState(false);
 
-  useEffect(() => {
-    // Java: Strict check for Runtime - verify ALL required functions
-    if (typeof window !== "undefined" && window.cheerpjRunMain && window.cheerpOSAddStringFile) {
-        setJavaReady(true);
-    }
-  }, []);
-
-  const initJava = async () => {
-    if (javaReady || javaInitializing) return;
-    setJavaInitializing(true);
-    try {
-        if (!document.getElementById("cheerpj-script")) {
-            const script = document.createElement("script");
-            script.id = "cheerpj-script";
-            script.src = "https://cjrtnc.leaningtech.com/3.0/cj3loader.js";
-            script.async = true;
-            document.body.appendChild(script);
-            
-            await new Promise<void>((resolve, reject) => {
-                script.onload = () => resolve();
-                script.onerror = () => reject(new Error("Failed to load CheerpJ script"));
-            });
-        }
-        
-        // Wait for cheerpjInit to be available
-        let attempts = 0;
-        while (!window.cheerpjInit && attempts < 50) {
-            await new Promise(r => setTimeout(r, 100));
-            attempts++;
-        }
-        
-        if (!window.cheerpjInit) {
-            throw new Error("CheerpJ loader did not initialize properly");
-        }
-
-        // Call init and wait for completion
-        await window.cheerpjInit();
-        
-        // Wait for ALL required CheerpJ functions to be available
-        attempts = 0;
-        while ((!window.cheerpjRunMain || !window.cheerpOSAddStringFile) && attempts < 100) {
-            await new Promise(r => setTimeout(r, 100));
-            attempts++;
-        }
-        
-        if (!window.cheerpjRunMain || !window.cheerpOSAddStringFile) {
-            throw new Error("CheerpJ runtime did not initialize properly - missing required functions");
-        }
-        
-        setJavaReady(true);
-    } catch (e: any) {
-        setError("Failed to initialize Java Runtime: " + e.message);
-        setJavaInitializing(false);
-    } finally {
-        setJavaInitializing(false);
-    }
-  };
-
-  const initWasmer = async () => {
-      if (wasmerReady) return;
-      setWasmerInitializing(true);
-      try {
-          // Dynamic import to avoid SSR issues and heavy bundle on load
-          const { Wasmer, init, runWasix } = await import("@wasmer/sdk");
-          await init();
-          setWasmerReady(true);
-      } catch (e: any) {
-          setError("Failed to initialize C/C++ Runtime: " + e.message);
-      } finally {
-          setWasmerInitializing(false);
-      }
-  }
 
 
   const runCode = useCallback(async () => {
@@ -274,122 +183,6 @@ except Exception:
             // The python-side try/except handles the user code errors.
             throw e;
         }
-      } else if (language === "java") {
-        if (!window.cheerpjInit || !window.cheerpjRunMain || !window.cheerpjFileRead) {
-             throw new Error("Java Runtime not initialized.");
-        }
-
-        // Capture console.log (CheerpJ writes to it)
-        const logs: string[] = [];
-        const originalLog = console.log;
-        const originalError = console.error;
-        
-        console.log = (...args) => {
-           logs.push(args.map(a => String(a)).join(" "));
-        };
-        console.error = (...args) => {
-           logs.push("[Error] " + args.map(a => String(a)).join(" "));
-        };
-
-        try {
-            await window.cheerpjFileRead("/str/Main.java", code);
-            const compileExitCode = await window.cheerpjRunMain("com.sun.tools.javac.Main", "/str/Main.java");
-            
-            if (compileExitCode !== 0) {
-                 throw new Error("Compilation Failed. Check output for details.");
-            }
-            
-            await window.cheerpjRunMain("Main");
-            
-            result = logs.join("\n");
-            
-            if (hiddenSuffixCode) {
-                const verifyFunc = new Function("output", hiddenSuffixCode);
-                try {
-                    verifyFunc(result);
-                } catch(e: any) {
-                    throw e;
-                }
-            }
-
-        } catch (e: any) {
-            throw e;
-        } finally {
-            console.log = originalLog;
-            console.error = originalError;
-        }
-
-      } else if (language === "c" || language === "cpp") {
-           // Wasmer Execution
-           // Import handled in initWasmer, but we need the objects here.
-           // Since @wasmer/sdk is stateful or we can re-import, let's see.
-           // Actually, we need to run `runWasix` from the sdk.
-           
-           try {
-               const { runWasix } = await import("@wasmer/sdk");
-               
-               // clang map: we need a clang package.
-               // We will use "clang/clang" or similar from Wasmer registry.
-               // For simplicity, we can use a reliable clang package.
-               // The documentation often suggests `wasmer/clang`.
-               
-               const packageName = "clang/clang"; 
-               
-               // 1. Create instance/run clang
-               // We need to pass the Source File.
-               // Wasmer SDK allows mounting files.
-               
-               // Strategy:
-               // runWasix(pkg, { args: [...], mount: { "main.c": code } })
-               
-               const compilationResult = await runWasix(packageName, {
-                   args: ["-o", "main.wasm", "main.c"],
-                   mount: {
-                       "main.c": code
-                   }
-               });
-               
-               if (compilationResult.exitCode !== 0) {
-                   throw new Error(`Calculated exit code ${compilationResult.exitCode}\n${compilationResult.stderr}`);
-               }
-               
-               // 2. We have the binary now?
-               // runWasix returns... a result.
-               // Wait, `runWasix` runs the process. Where is the output file "main.wasm"?
-               // It's in the virtual fs of that run.
-               // Does Wasmer SDK persist FS between runs? No, usually ephemeral or we need to extract it.
-               // Wait, checking docs (simulated): runWasix returns process output.
-               // We need `compilationResult.fs.readFile("main.wasm")`?
-               // Assuming standard Wasmer SDK usage:
-               
-               // Getting the output file from the completed process instance
-               // Note: This API might vary slightly based on version (0.6 vs 0.8).
-               // Assuming 0.8+
-               
-               const wasmBytes = await compilationResult.fs.readFile("main.wasm");
-               
-               // 3. Run the compiled binary
-               // We execute the byte array as a new WASM module?
-               // Or use runWasix with the bytes?
-               // runWasix can accept a program.
-               
-               const runResult = await runWasix(wasmBytes, {});
-               
-               result = runResult.stdout;
-               const runError = runResult.stderr;
-               
-               if (runError) {
-                   result += "\n[Stderr]: " + runError;
-               }
-
-               if (hiddenSuffixCode) {
-                   const verifyFunc = new Function("output", hiddenSuffixCode);
-                   verifyFunc(result);
-               }
-
-           } catch (e: any) {
-               setError(e.message);
-           }
       } else {
         // SQL...
         try {
@@ -547,76 +340,24 @@ run_sql()
     } finally {
       setIsLoading(false);
     }
-  }, [code, language, hiddenSuffixCode, onOutput, javaReady, wasmerReady]);
+  }, [code, language, hiddenSuffixCode, onOutput]);
 
   return (
     <div className={cn("border rounded-md overflow-hidden bg-[#1d1f21]", className)}>
       <div className="flex justify-between items-center bg-[#25282c] p-2 border-b border-border/20">
          <span className="text-xs text-muted-foreground uppercase font-mono ml-2">{language}</span>
          <div className="flex items-center gap-2">
-            {language === "java" && !javaReady && (
-                <span className="text-xs text-yellow-400 animate-pulse">
-                    {javaInitializing ? "Initializing Runtime..." : "Runtime Required"}
-                </span>
-            )}
-            {(language === "c" || language === "cpp") && !wasmerReady && (
-                 <span className="text-xs text-yellow-400 animate-pulse">
-                    {wasmerInitializing ? "Initializing Clang..." : "Runtime Required"}
-                 </span>
-            )}
-             <Button size="sm" onClick={runCode} disabled={isLoading || (language === "java" && !javaReady && !javaInitializing) || ((language === "c" || language === "cpp") && !wasmerReady && !wasmerInitializing)} className="h-7 text-xs">
+             <Button size="sm" onClick={runCode} disabled={isLoading} className="h-7 text-xs">
                {isLoading ? <Loader2 className="mr-1 h-3 w-3 animate-spin" /> : <Play className="mr-1 h-3 w-3" />}
                {isLoading ? "Running..." : "Run"}
              </Button>
          </div>
       </div>
       <div className="max-h-[300px] overflow-auto font-mono text-sm relative min-h-[150px]">
-        {/* Java Overlay */}
-        {language === "java" && !javaReady && (
-            <div className="absolute inset-0 z-10 bg-black/80 flex flex-col items-center justify-center text-center p-4">
-                {javaInitializing ? (
-                    <>
-                        <Loader2 className="h-8 w-8 animate-spin text-blue-400 mb-2" />
-                        <p className="text-xs text-muted-foreground">Downloading and Initializing Java VM (~20MB)...</p>
-                    </>
-                ) : (
-                    <>
-                         <Download className="h-8 w-8 text-blue-400 mb-2" />
-                         <p className="text-sm font-medium text-white mb-1">Click to Enable Java</p>
-                         <p className="text-xs text-muted-foreground mb-3">Requires ~20MB download (one-time)</p>
-                         <Button size="sm" variant="secondary" onClick={initJava}>
-                            Initialize Java Runtime
-                         </Button>
-                    </>
-                )}
-            </div>
-        )}
-
-        {/* Wasmer Overlay */}
-        {(language === "c" || language === "cpp") && !wasmerReady && (
-            <div className="absolute inset-0 z-10 bg-black/80 flex flex-col items-center justify-center text-center p-4">
-                {wasmerInitializing ? (
-                    <>
-                        <Loader2 className="h-8 w-8 animate-spin text-blue-400 mb-2" />
-                        <p className="text-xs text-muted-foreground">Downloading Clang Compiler...</p>
-                    </>
-                ) : (
-                    <>
-                         <Download className="h-8 w-8 text-blue-400 mb-2" />
-                         <p className="text-sm font-medium text-white mb-1">Click to Enable C/C++</p>
-                         <p className="text-xs text-muted-foreground mb-3">Requires Wasm download</p>
-                         <Button size="sm" variant="secondary" onClick={initWasmer}>
-                            Initialize C++ Runtime
-                         </Button>
-                    </>
-                )}
-            </div>
-        )}
-
         <Editor
           value={code}
           onValueChange={setCode}
-          highlight={(code) => highlight(code, languages[language === "sql" ? "sql" : language === "python" ? "python" : language === "typescript" ? "typescript" : language === "java" ? "java" : (language === "c" || language === "cpp") ? "clike" : "javascript"] || languages.js, language)}
+          highlight={(code) => highlight(code, languages[language === "sql" ? "sql" : language === "python" ? "python" : language === "typescript" ? "typescript" : "javascript"] || languages.js, language)}
           padding={16}
           className="font-mono text-[14px] min-h-[100px]"
           textareaClassName="focus:outline-none"
