@@ -11,6 +11,10 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   title: "Quick Learning",
   description: "A card-based learning platform",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg", 
+  },
 };
 
 export default function RootLayout({
