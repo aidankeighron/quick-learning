@@ -14,7 +14,8 @@ Define a class named `Car` with an empty body (use `pass`).
 # Define class Car
 pass
 > Verification Code:
-assert 'Car' in locals() and isinstance(Car, type)
+assert 'Car' in locals(), "Class 'Car' is not defined"
+assert isinstance(Car, type), "'Car' must be a class"
 print("Correct!")
 > Expected Output: Correct!
 
@@ -30,7 +31,8 @@ class Car:
         pass
 > Verification Code:
 c = Car()
-assert c.honk() == "Beep!"
+assert hasattr(c, 'honk'), "Method 'honk' missing in Car"
+assert c.honk() == "Beep!", f"Expected 'Beep!', got '{c.honk()}'"
 print("Correct!")
 > Expected Output: Correct!
 
@@ -46,7 +48,8 @@ class Car:
 # Define ElectricCar inheriting from Car
 pass
 > Verification Code:
-assert issubclass(ElectricCar, Car)
+assert 'ElectricCar' in locals(), "Class 'ElectricCar' not defined"
+assert issubclass(ElectricCar, Car), "ElectricCar should inherit from Car"
 print("Correct!")
 > Expected Output: Correct!
 
@@ -66,7 +69,7 @@ class Child(Parent):
         pass
 > Verification Code:
 c = Child()
-assert hasattr(c, 'parent_init') and c.parent_init is True
+assert hasattr(c, 'parent_init') and c.parent_init is True, "Parent init was not called (attribute 'parent_init' missing)"
 print("Correct!")
 > Expected Output: Correct!
 
@@ -82,7 +85,8 @@ class Secret:
         pass
 > Verification Code:
 s = Secret()
-assert s._key == "hidden"
+assert hasattr(s, '_key'), "Attribute '_key' missing"
+assert s._key == "hidden", f"Expected '_key' to be 'hidden', got '{s._key}'"
 print("Correct!")
 > Expected Output: Correct!
 
@@ -97,6 +101,7 @@ class Greeter:
         pass
 > Verification Code:
 g = Greeter()
-assert g.greet("Python") == "Hello, Python!"
+res = g.greet("Python")
+assert res == "Hello, Python!", f"Expected 'Hello, Python!', got '{res}'"
 print("Correct!")
 > Expected Output: Correct!

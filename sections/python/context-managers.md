@@ -33,10 +33,8 @@ class ResourceManagerMock:
 with ResourceManagerMock() as m:
     pass
 
-if called_enter and called_exit:
-    print("Correct!")
-else:
-    print("Context manager methods not called.")
+assert called_enter and called_exit, "Context manager methods were not triggered. Check your 'with' syntax."
+print("Correct!")
 > Expected Output: Correct!
 
 ## Question 2: Implementing __enter__
@@ -52,7 +50,7 @@ class Action:
     def __exit__(self, exc_type, exc_val, exc_tb): pass
 > Verification Code:
 with Action() as a:
-    assert a == "Action Started"
+    assert a == "Action Started", f"Expected __enter__ to return 'Action Started', got '{a}'"
 print("Correct!")
 > Expected Output: Correct!
 
@@ -77,10 +75,9 @@ with Logger():
     pass
 
 sys.stdout = old_stdout
-if "Exiting" in mystdout.getvalue():
-    print("Correct!")
-else:
-    print("Did not print 'Exiting'")
+output = mystdout.getvalue().strip()
+assert "Exiting" in output, f"Expected output to contain 'Exiting', got: '{output}'"
+print("Correct!")
 > Expected Output: Correct!
 
 ## Question 4: Suppressing Exceptions
@@ -100,7 +97,7 @@ try:
         raise ValueError("Oops")
     print("Correct!")
 except ValueError:
-    print("Exception was not suppressed")
+    raise AssertionError("Exception was not suppressed (did you return True in __exit__?)")
 > Expected Output: Correct!
 
 ## Question 5: contextlib Decorator
@@ -116,7 +113,7 @@ def simple_cm():
     pass
 > Verification Code:
 with simple_cm() as msg:
-    assert msg == "Hello"
+    assert msg == "Hello", f"Expected yielded value 'Hello', got '{msg}'"
 print("Correct!")
 > Expected Output: Correct!
 
@@ -129,31 +126,21 @@ Write a `with` statement to open a file named "test.txt" in write mode (`"w"`) a
 # with open...
 pass
 > Verification Code:
-# We will mock 'open' to avoid file system issues depending on environment
-from unittest.mock import MagicMock, mock_open
-m = mock_open()
-with MagicMock(side_effect=m) as open:
-    # Re-run user code with mocked open?
-    # Actually, we can just define a mock before usage?
-    # User's code is already defined in the scope?
-    # This is tricky because we can't easily inject the mock into their already-written code if it calls 'open' literally.
-    # ALTERNATIVE: Ask them to define a function `write_file()` that does it.
-    pass
-
-# Simplified for this specific runner:
-# The runner executes "Starting Code" + User Code + "Verification Code" in ORDER.
-# So we can't mock 'open' BEFORE their code if we don't control the order perfectly.
-# But 'Starting Code' is just their editor content.
-# 'Verification Code' runs APENDED.
-# So we can't mock 'open' effectively if they use the builtin.
-# Let's change the question to simple logic:
-# "Define a custom context manager MockFile..."
-# OR just rely on the runner allowing 'open' in memory? Pyodide often supports memfs.
 import os
-with open("test.txt", "w") as f:
-    f.write("content")
+try:
+    with open("test.txt", "w") as f:
+        f.write("content")
+except Exception as e:
+    raise AssertionError(f"Error opening/writing file: {e}")
+
 if os.path.exists("test.txt"):
-    print("Correct!")
+    try:
+        with open("test.txt", "r") as f:
+            content = f.read()
+        assert content == "content", f"Expected file content 'content', got '{content}'"
+        print("Correct!")
+    finally:
+        os.remove("test.txt") # Clean up
 else:
-    print("File not found")
+    raise AssertionError("File 'test.txt' was not found.")
 > Expected Output: Correct! 

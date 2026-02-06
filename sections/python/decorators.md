@@ -37,7 +37,8 @@ def simple_dec(func):
 > Verification Code:
 @simple_dec
 def test(): return "ok"
-assert test() == "ok"
+val = test()
+assert val == "ok", f"Expected 'ok', got '{val}'"
 print("Correct!")
 > Expected Output: Correct!
 
@@ -61,7 +62,7 @@ def test_func():
     """Docstring."""
     pass
 > Verification Code:
-assert test_func.__name__ == "test_func"
+assert test_func.__name__ == "test_func", f"Expected function name 'test_func', got '{test_func.__name__}'"
 print("Correct!")
 > Expected Output: Correct!
 
@@ -80,10 +81,8 @@ def greet():
 > Verification Code:
 # If dec1 is top/outer: dec1(dec2(greet)) -> "1" + "2" + "Hello"
 val = greet()
-if val == "12Hello":
-    print("Correct!")
-else:
-    print(f"Got {val}")
+assert val == "12Hello", f"Expected '12Hello', got '{val}'"
+print("Correct!")
 > Expected Output: Correct!
 
 ## Question 5: Handling Arguments
@@ -99,8 +98,12 @@ def pass_args(func):
 > Verification Code:
 @pass_args
 def add(a, b): return a + b
-assert add(2, 3) == 5
-print("Correct!")
+try:
+    res = add(2, 3)
+    assert res == 5, f"Expected 5, got {res}"
+    print("Correct!")
+except TypeError as e:
+    raise AssertionError(f"TypeError caught: {e}. Did you pass *args?")
 > Expected Output: Correct!
 
 ## Question 6: Simple Logger
@@ -126,10 +129,9 @@ hello()
 
 sys.stdout = old_stdout
 output = mystdout.getvalue().strip()
-# Expecting "Executing" then "Hello"
 lines = output.split('\n')
-if len(lines) >= 2 and "Executing" in lines[0] and "Hello" in lines[1]:
-    print("Correct!")
-else:
-    print(f"Output was: {output}")
+assert len(lines) >= 2, f"Expected at least 2 lines of output, got {len(lines)}"
+assert "Executing" in lines[0], f"First line should contain 'Executing', got '{lines[0]}'"
+assert "Hello" in lines[1], f"Second line should contain 'Hello', got '{lines[1]}'"
+print("Correct!")
 > Expected Output: Correct!

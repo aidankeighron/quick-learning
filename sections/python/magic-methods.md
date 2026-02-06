@@ -17,7 +17,7 @@ class Person:
         pass
 > Verification Code:
 p = Person("Alice")
-assert p.name == "Alice"
+assert p.name == "Alice", f"Expected name 'Alice', got '{p.name}'"
 print("Correct!")
 > Expected Output: Correct!
 
@@ -36,7 +36,7 @@ class Person:
         pass
 > Verification Code:
 p = Person("Bob")
-assert str(p) == "Person: Bob"
+assert str(p) == "Person: Bob", f"Expected 'Person: Bob', got '{str(p)}'"
 print("Correct!")
 > Expected Output: Correct!
 
@@ -55,7 +55,7 @@ class Container:
         pass
 > Verification Code:
 c = Container([1, 2, 3])
-assert len(c) == 3
+assert len(c) == 3, f"Expected length 3, got {len(c)}"
 print("Correct!")
 > Expected Output: Correct!
 
@@ -77,7 +77,7 @@ class Point:
 p1 = Point(1, 2)
 p2 = Point(3, 4)
 p3 = p1 + p2
-assert p3.x == 4 and p3.y == 6
+assert p3.x == 4 and p3.y == 6, f"Expected Point(4, 6), got Point({p3.x}, {p3.y})"
 print("Correct!")
 > Expected Output: Correct!
 
@@ -96,7 +96,7 @@ class Wrapper:
         pass
 > Verification Code:
 w = Wrapper(['a', 'b', 'c'])
-assert w[1] == 'b'
+assert w[1] == 'b', f"Expected 'b' at index 1, got '{w[1]}'"
 print("Correct!")
 > Expected Output: Correct!
 
@@ -122,8 +122,8 @@ class Counter:
 > Verification Code:
 c1 = Counter()
 c2 = c1 + 5
-assert c2.count == 5
-assert c1.count == 0 "Should be immutable add for this exercise"
-assert str(c2) == "5"
+assert c2.count == 5, f"Expected count 5, got {c2.count}"
+assert c1.count == 0, "Original counter modified (should be new object)"
+assert str(c2) == "5", f"Expected string '5', got '{str(c2)}'"
 print("Correct!")
 > Expected Output: Correct!
