@@ -47,7 +47,7 @@ export function QuizRunner({ quiz }: QuizRunnerProps) {
         const expected = (currentQuestion.expectedOutput || "").trim();
         const actual = codeOutput.trim();
         // Simple exact match check, can be improved
-        isCorrect = actual === expected || (expected === "Hello" && actual.includes("Hello"));
+        isCorrect = actual === expected;
     } else {
         if (selectedOptionIndex === null) return;
         isCorrect = currentQuestion.options![selectedOptionIndex].isCorrect;
