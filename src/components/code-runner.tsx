@@ -1,26 +1,37 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Editor from "react-simple-code-editor";
 import { highlight, languages } from "prismjs";
 import "prismjs/components/prism-clike";
 import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-typescript";
 import "prismjs/components/prism-python";
+import "prismjs/components/prism-java";
 import "prismjs/components/prism-sql";
 import "prismjs/themes/prism-tomorrow.css"; // Dark theme
 import { Button } from "./ui/button";
-import { Play, Loader2 } from "lucide-react";
+import { Play, Loader2, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { transform } from "sucrase";
 
 type CodeRunnerProps = {
-  language: "javascript" | "python" | "sql" | "typescript";
+  language: "javascript" | "python" | "sql" | "typescript" | "java";
   initialCode?: string;
   hiddenSuffixCode?: string;
   onOutput: (output: string) => void;
   className?: string;
 };
+
+// Global type definition for CheerpJ
+declare global {
+  interface Window {
+    cheerpjInit?: (options?: any) => Promise<void>;
+    cheerpjRunMain?: (main: string, ...args: string[]) => Promise<number>;
+    cheerpjFileWrite?: (path: string, content: string) => Promise<void>;
+    cheerpjFileRead?: (path: string) => Promise<Uint8Array | null>;
+  }
+}
 
 export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, className }: CodeRunnerProps) {
   const [code, setCode] = useState(
@@ -30,12 +41,56 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
       ? "const msg: string = 'Hello World';\nconsole.log(msg);"
       : language === "python" 
       ? "print('Hello World')" 
+      : language === "java"
+      ? "public class Main {\n  public static void main(String[] args) {\n    System.out.println(\"Hello World\");\n  }\n}"
       : "SELECT * FROM users;")
   );
   
   const [output, setOutput] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  
+  // Java State
+  const [javaReady, setJavaReady] = useState(false);
+  const [javaInitializing, setJavaInitializing] = useState(false);
+
+  useEffect(() => {
+    // Check if CheerpJ is already loaded globally
+    if (typeof window !== "undefined" && window.cheerpjInit) {
+        setJavaReady(true);
+    }
+  }, []);
+
+  const initJava = async () => {
+    if (javaReady) return;
+    setJavaInitializing(true);
+    try {
+        if (!document.getElementById("cheerpj-script")) {
+            const script = document.createElement("script");
+            script.id = "cheerpj-script";
+            script.src = "https://cjrtnc.leaningtech.com/3.0/cj3loader.js";
+            script.async = true;
+            document.body.appendChild(script);
+            
+            await new Promise<void>((resolve, reject) => {
+                script.onload = () => resolve();
+                script.onerror = () => reject(new Error("Failed to load CheerpJ script"));
+            });
+        }
+        
+        // Wait a tick for window.cheerpjInit to be available if script just loaded
+        while (!window.cheerpjInit) {
+            await new Promise(r => setTimeout(r, 100));
+        }
+
+        await window.cheerpjInit();
+        setJavaReady(true);
+    } catch (e: any) {
+        setError("Failed to initialize Java Runtime: " + e.message);
+    } finally {
+        setJavaInitializing(false);
+    }
+  };
 
   const runCode = useCallback(async () => {
     setOutput("");
@@ -127,6 +182,93 @@ except Exception:
             // The python-side try/except handles the user code errors.
             throw e;
         }
+      } else if (language === "java") {
+        if (!window.cheerpjInit || !window.cheerpjRunMain || !window.cheerpjFileWrite) {
+             throw new Error("Java Runtime not initialized.");
+        }
+
+        // Capture console.log (CheerpJ writes to it)
+        const logs: string[] = [];
+        const originalLog = console.log;
+        const originalError = console.error;
+        
+        console.log = (...args) => {
+           logs.push(args.map(a => String(a)).join(" "));
+           // Optional: Passthrough to real console for debugging
+           // originalLog.apply(console, args); 
+        };
+        console.error = (...args) => {
+           logs.push("[Error] " + args.map(a => String(a)).join(" "));
+        };
+
+        try {
+            // 1. Write Source
+            // CheerpJ allows writing to virtual FS. 
+            // We use /str/Main.java as a standard location
+            await window.cheerpjFileWrite("/str/Main.java", code);
+
+            // 2. Compile
+            // Running javac. This might take a moment.
+            // We can add a "Compiling..." indicator if needed, but isLoading handles usage.
+            const compileExitCode = await window.cheerpjRunMain("com.sun.tools.javac.Main", "/str/Main.java");
+            
+            if (compileExitCode !== 0) {
+                 throw new Error("Compilation Failed. Check output for details.");
+            }
+
+            // 3. Run
+            // Check if verification code exists.
+            // If so, we might need to append it to Main? Or run it?
+            // Java verification is harder because we can't easily "append" code to a compiled class without recompiling.
+            // FOR NOW: We will rely on printing output and checking it, effectively "Output Matching".
+            // Implementation Plan update: Java verification ideally relies on simple output check or we complexly rewrite the Main class.
+            // Let's assume the user writes Main, and we might run a separate Verifier class?
+            // Simpler: Just run Main and return output. The QuizRunner will check expected output.
+            
+            await window.cheerpjRunMain("Main");
+            
+            result = logs.join("\n");
+            
+            // If verification code is mostly "check if output contains X", we are good.
+            // If hiddenSuffixCode is strictly "Java code", we can't easily inject it into `public static void main` without parsing.
+            // Strategy: For Java, we mostly stick to "Expected Output" matching in the markdown, OR we append the verification logic to the Main class string *before* writing/compiling.
+            
+            if (hiddenSuffixCode) {
+                // If there IS hidden suffix code, we assume it's valid Java code to be injected into main?
+                // Or maybe it's just JS code that checks the output variable?
+                // "QuizRunner" logic for 'code' type questions usually expects `verificationCode` to be JS that runs safely?
+                // Wait, `verificationCode` in the MD files is currently executed as JS in the runner?
+                // Look at `src/lib/content.ts` -> it parses `verificationCode`.
+                // In `CodeRunner` for JS/TS, we eval it.
+                // In `CodeRunner` for Python, we Exec it.
+                // For Java, we probably want to run it as JS that checks `output` string!
+                // YES! The pattern so far: Verification Code is *runner-language* specific usually, BUT:
+                // For JS: It IS JS.
+                // For Python: It IS Python.
+                // For Java: It should probably be JS that inspects the output, because compiling dynamic Java test assertions is painful (classpath hell).
+                // Let's stick to: Verification for Java = JS code that inspects `result` (the string output).
+                
+                // So, treat hiddenSuffixCode as JS here.
+                const verifyFunc = new Function("output", hiddenSuffixCode);
+                try {
+                    verifyFunc(result);
+                } catch(e: any) {
+                    // Start error output with standard format so QuizRunner picks it up
+                    // But wait, QuizRunner just checks if *output* contains string.
+                    // Actually, for JS/Python, the verification code *throws* errors, which we catch and show.
+                    // So here, we run the JS verification, catch error, and append to output?
+                    // OR: We let it throw, catch it here, and set error.
+                    throw e;
+                }
+            }
+
+        } catch (e: any) {
+            throw e;
+        } finally {
+            console.log = originalLog;
+            console.error = originalError;
+        }
+
       } else {
         // SQL Handling
         try {
@@ -284,22 +426,50 @@ run_sql()
     } finally {
       setIsLoading(false);
     }
-  }, [code, language, hiddenSuffixCode, onOutput]);
+  }, [code, language, hiddenSuffixCode, onOutput, javaReady]);
 
   return (
     <div className={cn("border rounded-md overflow-hidden bg-[#1d1f21]", className)}>
       <div className="flex justify-between items-center bg-[#25282c] p-2 border-b border-border/20">
          <span className="text-xs text-muted-foreground uppercase font-mono ml-2">{language}</span>
-         <Button size="sm" onClick={runCode} disabled={isLoading} className="h-7 text-xs">
-           {isLoading ? <Loader2 className="mr-1 h-3 w-3 animate-spin" /> : <Play className="mr-1 h-3 w-3" />}
-           {isLoading ? "Running..." : "Run"}
-         </Button>
+         <div className="flex items-center gap-2">
+            {language === "java" && !javaReady && (
+                <span className="text-xs text-yellow-400 animate-pulse">
+                    {javaInitializing ? "Initializing Runtime..." : "Runtime Required"}
+                </span>
+            )}
+             <Button size="sm" onClick={runCode} disabled={isLoading || (language === "java" && !javaReady && !javaInitializing)} className="h-7 text-xs">
+               {isLoading ? <Loader2 className="mr-1 h-3 w-3 animate-spin" /> : <Play className="mr-1 h-3 w-3" />}
+               {isLoading ? (language === "java" ? "Compiling & Running..." : "Running...") : "Run"}
+             </Button>
+         </div>
       </div>
-      <div className="max-h-[300px] overflow-auto font-mono text-sm relative">
+      <div className="max-h-[300px] overflow-auto font-mono text-sm relative min-h-[150px]">
+        {/* Java Overlay */}
+        {language === "java" && !javaReady && (
+            <div className="absolute inset-0 z-10 bg-black/80 flex flex-col items-center justify-center text-center p-4">
+                {javaInitializing ? (
+                    <>
+                        <Loader2 className="h-8 w-8 animate-spin text-blue-400 mb-2" />
+                        <p className="text-xs text-muted-foreground">Downloading and Initializing Java VM (~20MB)...</p>
+                    </>
+                ) : (
+                    <>
+                         <Download className="h-8 w-8 text-blue-400 mb-2" />
+                         <p className="text-sm font-medium text-white mb-1">Click to Enable Java</p>
+                         <p className="text-xs text-muted-foreground mb-3">Requires ~20MB download (one-time)</p>
+                         <Button size="sm" variant="secondary" onClick={initJava}>
+                            Initialize Java Runtime
+                         </Button>
+                    </>
+                )}
+            </div>
+        )}
+
         <Editor
           value={code}
           onValueChange={setCode}
-          highlight={(code) => highlight(code, languages[language === "sql" ? "sql" : language === "python" ? "python" : language === "typescript" ? "typescript" : "javascript"] || languages.js, language)}
+          highlight={(code) => highlight(code, languages[language === "sql" ? "sql" : language === "python" ? "python" : language === "typescript" ? "typescript" : language === "java" ? "java" : "javascript"] || languages.js, language)}
           padding={16}
           className="font-mono text-[14px] min-h-[100px]"
           textareaClassName="focus:outline-none"
