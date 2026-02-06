@@ -68,7 +68,7 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
   }, []);
 
   const initJava = async () => {
-    if (javaReady) return;
+    if (javaReady || javaInitializing) return;
     setJavaInitializing(true);
     try {
         if (!document.getElementById("cheerpj-script")) {
@@ -84,19 +84,35 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
             });
         }
         
-        // Wait a tick for window.cheerpjInit to be available
-        while (!window.cheerpjInit) {
+        // Wait for cheerpjInit to be available
+        let attempts = 0;
+        while (!window.cheerpjInit && attempts < 50) {
             await new Promise(r => setTimeout(r, 100));
+            attempts++;
+        }
+        
+        if (!window.cheerpjInit) {
+            throw new Error("CheerpJ loader did not initialize properly");
         }
 
-        // Only call init if runMain isn't there (avoid double-init if possible, though CheerpJ handles it usually)
+        // Call init and wait for completion
+        await window.cheerpjInit();
+        
+        // Wait for cheerpjRunMain to be available (the actual runtime)
+        attempts = 0;
+        while (!window.cheerpjRunMain && attempts < 100) {
+            await new Promise(r => setTimeout(r, 100));
+            attempts++;
+        }
+        
         if (!window.cheerpjRunMain) {
-             await window.cheerpjInit();
+            throw new Error("CheerpJ runtime did not initialize properly");
         }
         
         setJavaReady(true);
     } catch (e: any) {
         setError("Failed to initialize Java Runtime: " + e.message);
+        setJavaInitializing(false);
     } finally {
         setJavaInitializing(false);
     }
@@ -116,6 +132,7 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
           setWasmerInitializing(false);
       }
   }
+
 
   const runCode = useCallback(async () => {
     setOutput("");

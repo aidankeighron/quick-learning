@@ -8,6 +8,7 @@ difficulty: "Intermediate"
 ## Question 1: Purpose of Context Managers
 What is the primary purpose of a context manager in Python?
 
+> Link: https://www.w3schools.com/python/python_file_open.asp
 > Type: multiple-choice
 - [ ] To manage memory manually
 - [x] To setup and teardown resources automatically
@@ -17,6 +18,7 @@ What is the primary purpose of a context manager in Python?
 ## Question 2: The With Keyword
 Which keyword activates a context manager?
 
+> Link: https://www.w3schools.com/python/python_file_open.asp
 > Type: multiple-choice
 - [ ] use
 - [x] with
@@ -26,6 +28,7 @@ Which keyword activates a context manager?
 ## Question 3: The 'with' Statement
 Use the `with` statement to manage corresponding resource `ResourceManager()`. The variable name should be `m`.
 
+> Link: https://www.w3schools.com/python/python_file_open.asp
 > Type: code
 > Language: python
 > Starting Code:
@@ -58,6 +61,7 @@ print("Correct!")
 ## Question 4: Implementing __enter__
 Complete the `Action` class so that `__enter__` returns the string "Action Started".
 
+> Link: https://www.w3schools.com/python/python_file_open.asp
 > Type: code
 > Language: python
 > Starting Code:
@@ -75,6 +79,7 @@ print("Correct!")
 ## Question 5: Context Manager Protocol
 Which two magic methods are required to create a class-based context manager?
 
+> Link: https://www.w3schools.com/python/python_file_open.asp
 > Type: multiple-choice
 - [ ] `__init__` and `__del__`
 - [ ] `__start__` and `__finish__`
@@ -84,6 +89,7 @@ Which two magic methods are required to create a class-based context manager?
 ## Question 6: Using contextlib
 What decorator from the `contextlib` module can convert a generator into a context manager?
 
+> Link: https://www.w3schools.com/python/python_file_open.asp
 > Type: multiple-choice
 - [ ] `@generator`
 - [x] `@contextmanager`
@@ -93,6 +99,7 @@ What decorator from the `contextlib` module can convert a generator into a conte
 ## Question 7: Implementing __exit__
 Complete the `__exit__` method to print "Exiting" when the block ends.
 
+> Link: https://www.w3schools.com/python/python_file_open.asp
 > Type: code
 > Language: python
 > Starting Code:
@@ -119,6 +126,7 @@ print("Correct!")
 ## Question 8: Suppressing Exceptions
 Modify `__exit__` to return `True`, which will suppress any exception raised inside the `with` block.
 
+> Link: https://www.w3schools.com/python/python_file_open.asp
 > Type: code
 > Language: python
 > Starting Code:
@@ -139,6 +147,7 @@ except ValueError:
 ## Question 9: contextlib Decorator
 Use `@contextmanager` from `contextlib` to create a context manager named `simple_cm` that yields "Hello".
 
+> Link: https://www.w3schools.com/python/python_file_open.asp
 > Type: code
 > Language: python
 > Starting Code:
@@ -156,6 +165,7 @@ print("Correct!")
 ## Question 10: File Opening Pattern
 Write a `with` statement to open a file named "test.txt" in write mode (`"w"`) as `f`, and write "content" to it.
 
+> Link: https://www.w3schools.com/python/python_file_open.asp
 > Type: code
 > Language: python
 > Starting Code:

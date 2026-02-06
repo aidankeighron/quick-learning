@@ -8,6 +8,7 @@ difficulty: "Intermediate"
 ## Question 1: What is a Decorator?
 In Python, what is a decorator?
 
+> Link: https://www.w3schools.com/python/python_decorators.asp
 > Type: multiple-choice
 - [ ] A function that returns a boolean value
 - [x] A design pattern that allows a user to add new functionality to an existing object without modifying its structure
@@ -17,6 +18,7 @@ In Python, what is a decorator?
 ## Question 2: Decorator Syntax
 Which symbol is used to apply a decorator to a function in Python?
 
+> Link: https://www.w3schools.com/python/python_decorators.asp
 > Type: multiple-choice
 - [ ] #
 - [ ] &
@@ -26,6 +28,7 @@ Which symbol is used to apply a decorator to a function in Python?
 ## Question 3: Decorator Syntax
 Use the correct syntax to apply the `my_decorator` to the `hello` function.
 
+> Link: https://www.w3schools.com/python/python_decorators.asp
 > Type: code
 > Language: python
 > Starting Code:
@@ -45,6 +48,7 @@ print("Correct!")
 ## Question 4: Creating a Decorator
 Write a decorator `simple_dec` that takes a function, and returns a `wrapper` function (which just calls the original function).
 
+> Link: https://www.w3schools.com/python/python_decorators.asp
 > Type: code
 > Language: python
 > Starting Code:
@@ -63,6 +67,7 @@ print("Correct!")
 ## Question 5: Execution Order
 When using multiple decorators on a single function, in what order are they applied?
 
+> Link: https://www.w3schools.com/python/python_decorators.asp
 > Type: multiple-choice
 - [ ] Top to bottom
 - [x] Bottom to top (Inner to Outer)
@@ -72,6 +77,7 @@ When using multiple decorators on a single function, in what order are they appl
 ## Question 6: Decorating with Arguments
 If you are decorating a function that accepts arguments, what must your wrapper function do?
 
+> Link: https://www.w3schools.com/python/python_decorators.asp
 > Type: multiple-choice
 - [ ] It cannot accept arguments
 - [x] It should accept *args and **kwargs (or specific args) and pass them to the original function
@@ -81,6 +87,7 @@ If you are decorating a function that accepts arguments, what must your wrapper 
 ## Question 7: Preserving Metadata
 Use `@functools.wraps` inside `my_dec` so that the decorated function retains its original name `test_func`.
 
+> Link: https://www.w3schools.com/python/python_decorators.asp
 > Type: code
 > Language: python
 > Starting Code:
@@ -105,6 +112,7 @@ print("Correct!")
 ## Question 8: Chaining Decorators
 Apply both `dec1` and `dec2` to `greet`. `dec1` should run *outside* (first applied, last executed) and `dec2` *inside*.
 
+> Link: https://www.w3schools.com/python/python_decorators.asp
 > Type: code
 > Language: python
 > Starting Code:
@@ -124,6 +132,7 @@ print("Correct!")
 ## Question 9: Handling Arguments
 Update the wrapper to accept any positional arguments (`*args`) and pass them to `func`.
 
+> Link: https://www.w3schools.com/python/python_decorators.asp
 > Type: code
 > Language: python
 > Starting Code:
@@ -145,6 +154,7 @@ except TypeError as e:
 ## Question 10: Simple Logger
 Write a decorator `log_execution` that prints "Executing" before running the function.
 
+> Link: https://www.w3schools.com/python/python_decorators.asp
 > Type: code
 > Language: python
 > Starting Code:

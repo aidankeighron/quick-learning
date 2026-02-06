@@ -8,6 +8,7 @@ difficulty: "Intermediate"
 ## Question 1: What is a Generator?
 What is the primary benefit of using a generator over a standard list in Python?
 
+> Link: https://www.w3schools.com/python/python_iterators.asp
 > Type: multiple-choice
 - [ ] It sorts data automatically
 - [ ] It allows random access to elements
@@ -17,6 +18,7 @@ What is the primary benefit of using a generator over a standard list in Python?
 ## Question 2: The Yield Keyword
 Which keyword is used to return a value from a generator function without terminating it?
 
+> Link: https://www.w3schools.com/python/python_iterators.asp
 > Type: multiple-choice
 - [ ] return
 - [x] yield
@@ -26,6 +28,7 @@ Which keyword is used to return a value from a generator function without termin
 ## Question 3: Basic Generator
 Create a generator function `simple_gen` that yields the number 1, then 2, then 3.
 
+> Link: https://www.w3schools.com/python/python_iterators.asp
 > Type: code
 > Language: python
 > Starting Code:
@@ -41,6 +44,7 @@ print("Correct!")
 ## Question 4: Generator with Arguments
 Write a generator function `count_to(n)` that yields numbers from 1 up to (and including) `n`.
 
+> Link: https://www.w3schools.com/python/python_iterators.asp
 > Type: code
 > Language: python
 > Starting Code:
@@ -56,6 +60,7 @@ print("Correct!")
 ## Question 5: Memory Usage
 If you need to process a clear large file line by line, which approach uses the least memory?
 
+> Link: https://www.w3schools.com/python/python_iterators.asp
 > Type: multiple-choice
 - [ ] Reading the entire file into a list
 - [x] Using a generator to yield each line
@@ -65,6 +70,7 @@ If you need to process a clear large file line by line, which approach uses the 
 ## Question 6: StopIteration Exception
 What exception is raised when a `next()` call is made on a generator that has no more items to yield?
 
+> Link: https://www.w3schools.com/python/python_iterators.asp
 > Type: multiple-choice
 - [ ] IndexError
 - [ ] ValueError
@@ -74,6 +80,7 @@ What exception is raised when a `next()` call is made on a generator that has no
 ## Question 7: Using next()
 Given the generator `g`, use the `next()` function to help retrieve the first value and assign it to the variable `first_val`.
 
+> Link: https://www.w3schools.com/python/python_iterators.asp
 > Type: code
 > Language: python
 > Starting Code:
@@ -97,6 +104,7 @@ except NameError:
 ## Question 8: Generator Expressions
 Create a generator expression named `squares` that yields the square of numbers from 0 to 4 (inclusive). Use parens `()` not brackets `[]`.
 
+> Link: https://www.w3schools.com/python/python_iterators.asp
 > Type: code
 > Language: python
 > Starting Code:
@@ -112,6 +120,7 @@ print("Correct!")
 ## Question 9: Yield From
 Write a generator `sub_gen` that uses `yield from` to yield all values from `range(3)`.
 
+> Link: https://www.w3schools.com/python/python_iterators.asp
 > Type: code
 > Language: python
 > Starting Code:
@@ -127,6 +136,7 @@ print("Correct!")
 ## Question 10: Fibonacci Generator
 Write a generator `fibonacci(limit)` that yields Fibonacci numbers (0, 1, 1, 2, 3...) as long as they are less than `limit`.
 
+> Link: https://www.w3schools.com/python/python_iterators.asp
 > Type: code
 > Language: python
 > Starting Code:

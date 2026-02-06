@@ -126,3 +126,4 @@ SELECT * FROM Users;
     *   *Python*: Hidden code that runs after user code. Use `assert`.
     *   *SQL*: Hidden correct query to compare results against.
 - **Expected Output**: String shown to user as the target output.
+- **Link**: `> Link: [url]` (Optional) - URL to a relevant resource (e.g., W3Schools) shown in the question header.
