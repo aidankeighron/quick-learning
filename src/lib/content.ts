@@ -134,6 +134,8 @@ function parseQuizContent(content: string): Question[] {
 
       if (trimmed.startsWith("> Type: code")) {
         type = "code";
+      } else if (trimmed.startsWith("> Type: multiple-choice")) {
+        type = "multiple-choice"; // Explicitly set (already default, but skip the line)
       } else if (trimmed.startsWith("> Language:")) {
         language = trimmed.replace(/^> Language:/, "").trim().toLowerCase() as any;
       } else if (trimmed.startsWith("> Expected Output:")) {
