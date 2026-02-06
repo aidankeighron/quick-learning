@@ -5,7 +5,25 @@ order: 1
 difficulty: "Beginner"
 ---
 
-## Question 1: Select All
+## Question 1: Data Retrieval
+Which SQL keyword is used to retrieve data from a database?
+
+> Type: multiple-choice
+- [ ] GET
+- [ ] FETCH
+- [x] SELECT
+- [ ] PULL
+
+## Question 2: Filtering Records
+Which clause is used to filter records?
+
+> Type: multiple-choice
+- [ ] FILTER
+- [x] WHERE
+- [ ] WHEN
+- [ ] IF
+
+## Question 3: Select All
 Retrieve all columns from the `Users` table.
 
 > Type: code
@@ -15,13 +33,9 @@ Retrieve all columns from the `Users` table.
 > Verification Code:
 SELECT * FROM Users;
 > Expected Output:
-1 | Alice Smith | alice@example.com | USA | 2023-01-15
-2 | Bob Jones | bob@example.com | UK | 2023-02-20
-3 | Charlie Brown | charlie@example.com | Canada | 2023-03-10
-4 | Diana Prince | diana@example.com | USA | 2023-01-05
-5 | Evan Wright | evan@example.com | Australia | 2023-04-12
+1 | Alice Smith | alice@example.com | USA | 2023-01-15...
 
-## Question 2: Select Specific Columns
+## Question 4: Select Specific Columns
 Select only the `name` and `country` columns from the `Users` table.
 
 > Type: code
@@ -32,12 +46,27 @@ Select only the `name` and `country` columns from the `Users` table.
 SELECT name, country FROM Users;
 > Expected Output:
 Alice Smith | USA
-Bob Jones | UK
-Charlie Brown | Canada
-Diana Prince | USA
-Evan Wright | Australia
+Bob Jones | UK...
 
-## Question 3: Filtering with WHERE
+## Question 5: Sorting Direction
+Which keyword sorts result in descending order?
+
+> Type: multiple-choice
+- [ ] DOWN
+- [x] DESC
+- [ ] REVERSE
+- [ ] ASC
+
+## Question 6: Unique Values
+How do you select only distinct (different) values?
+
+> Type: multiple-choice
+- [ ] SELECT UNIQUE
+- [x] SELECT DISTINCT
+- [ ] SELECT DIFFERENT
+- [ ] SELECT SINGLE
+
+## Question 7: Filtering with WHERE
 Select all columns from `Orders` where the `status` is 'Completed'.
 
 > Type: code
@@ -47,10 +76,9 @@ Select all columns from `Orders` where the `status` is 'Completed'.
 > Verification Code:
 SELECT * FROM Orders WHERE status = 'Completed';
 > Expected Output:
-101 | 1 | 150.5 | Completed | 2023-05-01
-103 | 1 | 45 | Completed | 2023-05-05
+101 | 1 | 150.5 | Completed...
 
-## Question 4: Sorting Results
+## Question 8: Sorting Results
 Select all columns from `Products` ordered by `price` in descending order relative to largest first (DESC).
 
 > Type: code
@@ -60,13 +88,9 @@ Select all columns from `Products` ordered by `price` in descending order relati
 > Verification Code:
 SELECT * FROM Products ORDER BY price DESC;
 > Expected Output:
-1 | Laptop | Electronics | 999.99 | 10
-2 | Smartphone | Electronics | 699.99 | 20
-5 | Headphones | Electronics | 199.99 | 30
-3 | Desk Chair | Furniture | 149.99 | 15
-4 | Coffee Table | Furniture | 89.99 | 5
+1 | Laptop | Electronics | 999.99...
 
-## Question 5: Multiple Conditions
+## Question 9: Multiple Conditions
 Select all `Products` where the `category` is 'Electronics' AND the `price` is greater than 500.
 
 > Type: code
@@ -76,10 +100,9 @@ Select all `Products` where the `category` is 'Electronics' AND the `price` is g
 > Verification Code:
 SELECT * FROM Products WHERE category = 'Electronics' AND price > 500;
 > Expected Output:
-1 | Laptop | Electronics | 999.99 | 10
-2 | Smartphone | Electronics | 699.99 | 20
+1 | Laptop | Electronics | 999.99...
 
-## Question 6: Limiting Results
+## Question 10: Limiting Results
 Select the first 3 rows from the `Users` table.
 
 > Type: code
@@ -89,6 +112,6 @@ Select the first 3 rows from the `Users` table.
 > Verification Code:
 SELECT * FROM Users LIMIT 3;
 > Expected Output:
-1 | Alice Smith | alice@example.com | USA | 2023-01-15
-2 | Bob Jones | bob@example.com | UK | 2023-02-20
-3 | Charlie Brown | charlie@example.com | Canada | 2023-03-10 
+1 | Alice Smith...
+2 | Bob Jones...
+3 | Charlie Brown...
