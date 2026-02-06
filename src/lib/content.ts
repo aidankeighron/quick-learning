@@ -37,6 +37,7 @@ export type Question = {
   startingCode?: string; // Initial code in editor
   hint?: string;
   explanation?: string;
+  learnMoreUrl?: string;
 };
 
 export type Option = {
@@ -123,6 +124,7 @@ function parseQuizContent(content: string): Question[] {
     let expectedOutput = "";
     let verificationCode = "";
     let startingCode = "";
+    let learnMoreUrl = "";
     
     let currentMode: "description" | "options" | "hint" | "explanation" | "verificationCode" | "startingCode" = "description";
 
@@ -137,16 +139,12 @@ function parseQuizContent(content: string): Question[] {
       } else if (trimmed.startsWith("> Expected Output:")) {
         expectedOutput = trimmed.replace(/^> Expected Output:/, "").trim();
       } else if (trimmed.startsWith("> Verification Code:")) {
-        // We need to capture potentially multi-line verification code
-        // But the current parser is line-based. 
-        // Let's assume verification code is a single line or we switch mode.
-        // Actually, let's switch mode for robustness if it gets complex.
-        // For now, let's treat it like Hint/Explanation if it's multi-line?
-        // OR simply: > Verification Code: assert sum([1,2]) == 3
-        // Let's support multi-line by adding a mode.
         currentMode = "verificationCode";
       } else if (trimmed.startsWith("> Starting Code:")) {
          currentMode = "startingCode";
+      } else if (trimmed.startsWith("> Link:")) {
+         // Link is usually single line
+         learnMoreUrl = trimmed.replace(/^> Link:/, "").trim();
       } else if (trimmed.startsWith("- [")) {
         currentMode = "options";
         const isCorrect = trimmed.startsWith("- [x]");
@@ -166,16 +164,6 @@ function parseQuizContent(content: string): Question[] {
         } else if (currentMode === "explanation") {
            explanation += " " + trimmed;
         } else if (currentMode === "verificationCode") {
-           // Verification code typically needs newlines preserved
-           // But `trimmed` removes leading whitespace which might break indentation of python code.
-           // We should probably use `line` instead of `trimmed` for code blocks.
-           // However, the block splitting logic trims the block lines initially?
-           // No, `block.split("\n")` preserves lines.
-           // But we are iterating `remainingLines`.
-           // `line` preserves indentation relative to the file, but we might have indentation from block quote?
-           // The user format is `> Verification Code:`
-           // If follows standard markdown, maybe we shouldn't trim heavily.
-           // For now let's just append with newline.
            verificationCode += (verificationCode ? "\n" : "") + line.replace(/^> /, ""); 
         } else if (currentMode === "startingCode") {
            startingCode += (startingCode ? "\n" : "") + line.replace(/^> /, "");
@@ -193,7 +181,8 @@ function parseQuizContent(content: string): Question[] {
       startingCode: startingCode || undefined,
       options: options.length > 0 ? options : undefined,
       hint: hint || undefined,
-      explanation: explanation || undefined
+      explanation: explanation || undefined,
+      learnMoreUrl: learnMoreUrl || undefined,
     });
   }
 
