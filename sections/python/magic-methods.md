@@ -5,7 +5,25 @@ order: 5
 difficulty: "Advanced"
 ---
 
-## Question 1: Initialization (__init__)
+## Question 1: What are Magic Methods?
+What distinguishes magic methods (dunder methods) in Python?
+
+> Type: multiple-choice
+- [ ] They disappear after use
+- [x] They start and end with double underscores
+- [ ] They are only used in functional programming
+- [ ] They optimize code speed
+
+## Question 2: Constructor
+Which magic method is commonly known as the constructor/initializer?
+
+> Type: multiple-choice
+- [ ] `__new__`
+- [x] `__init__`
+- [ ] `__create__`
+- [ ] `__construct__`
+
+## Question 3: Initialization (__init__)
 Define a class `Person` with an `__init__` method that assigns the argument `name` to `self.name`.
 
 > Type: code
@@ -21,7 +39,7 @@ assert p.name == "Alice", f"Expected name 'Alice', got '{p.name}'"
 print("Correct!")
 > Expected Output: Correct!
 
-## Question 2: String Representation (__str__)
+## Question 4: String Representation (__str__)
 Define a `__str__` method for `Person` that returns the string "Person: [name]".
 
 > Type: code
@@ -40,7 +58,25 @@ assert str(p) == "Person: Bob", f"Expected 'Person: Bob', got '{str(p)}'"
 print("Correct!")
 > Expected Output: Correct!
 
-## Question 3: Length (__len__)
+## Question 5: Debug Representation
+What is `__repr__` primarily used for?
+
+> Type: multiple-choice
+- [ ] User-friendly string output
+- [x] Unambiguous representation for debugging
+- [ ] Representing numbers
+- [ ] Creating copies
+
+## Question 6: Operator Overloading
+Which method implements the '+' operator?
+
+> Type: multiple-choice
+- [ ] `__plus__`
+- [ ] `__sum__`
+- [x] `__add__`
+- [ ] `__math__`
+
+## Question 7: Length (__len__)
 Define a class `Container` with a list `items`. Implement `__len__` to return the number of items.
 
 > Type: code
@@ -59,7 +95,7 @@ assert len(c) == 3, f"Expected length 3, got {len(c)}"
 print("Correct!")
 > Expected Output: Correct!
 
-## Question 4: Addition (__add__)
+## Question 8: Addition (__add__)
 Define a class `Point` with `x` and `y`. Implement `__add__` to return a new `Point` that is the sum of two points (add x's and y's).
 
 > Type: code
@@ -81,7 +117,7 @@ assert p3.x == 4 and p3.y == 6, f"Expected Point(4, 6), got Point({p3.x}, {p3.y}
 print("Correct!")
 > Expected Output: Correct!
 
-## Question 5: Item Access (__getitem__)
+## Question 9: Item Access (__getitem__)
 Define a class `Wrapper` that holds a list `data`. Implement `__getitem__` to allow indexing `wrapper[index]`.
 
 > Type: code
@@ -100,7 +136,7 @@ assert w[1] == 'b', f"Expected 'b' at index 1, got '{w[1]}'"
 print("Correct!")
 > Expected Output: Correct!
 
-## Question 6: Complete Class
+## Question 10: Complete Class
 Create a class `Counter` that starts at 0. Implement `__add__` to add an integer to the counter, and `__str__` to return the current count as a string.
 
 > Type: code

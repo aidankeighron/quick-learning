@@ -5,7 +5,25 @@ order: 4
 difficulty: "Advanced"
 ---
 
-## Question 1: Class Definition
+## Question 1: What is a Class?
+In OOP, what is a class?
+
+> Type: multiple-choice
+- [ ] A specific instance of an object
+- [x] A blueprint for creating objects
+- [ ] A function that returns values
+- [ ] A list of data
+
+## Question 2: Instantiation
+How do you create an instance of a class named `MyClass`?
+
+> Type: multiple-choice
+- [ ] `new MyClass()`
+- [x] `MyClass()`
+- [ ] `create MyClass()`
+- [ ] `MyClass.new()`
+
+## Question 3: Class Definition
 Define a class named `Car` with an empty body (use `pass`).
 
 > Type: code
@@ -19,7 +37,7 @@ assert isinstance(Car, type), "'Car' must be a class"
 print("Correct!")
 > Expected Output: Correct!
 
-## Question 2: The Self Parameter
+## Question 4: The Self Parameter
 Define a method `honk(self)` inside `Car` that returns the string "Beep!".
 
 > Type: code
@@ -36,7 +54,25 @@ assert c.honk() == "Beep!", f"Expected 'Beep!', got '{c.honk()}'"
 print("Correct!")
 > Expected Output: Correct!
 
-## Question 3: Inheritance
+## Question 5: Inheritance Concept
+What feature of OOP allows a class to derive attributes and methods from another class?
+
+> Type: multiple-choice
+- [ ] Polymorphism
+- [ ] Encapsulation
+- [x] Inheritance
+- [ ] Abstraction
+
+## Question 6: Method Overriding
+What happens when a child class defines a method with the same name as the parent class?
+
+> Type: multiple-choice
+- [ ] It causes an error
+- [x] It overrides the parent method
+- [ ] It calls both methods
+- [ ] The child method is ignored
+
+## Question 7: Inheritance
 Define a class `ElectricCar` that inherits from `Car`.
 
 > Type: code
@@ -53,7 +89,7 @@ assert issubclass(ElectricCar, Car), "ElectricCar should inherit from Car"
 print("Correct!")
 > Expected Output: Correct!
 
-## Question 4: Super Function
+## Question 8: Super Function
 Inside `Child.__init__`, use `super()` to call the parent's `__init__` method.
 
 > Type: code
@@ -73,7 +109,7 @@ assert hasattr(c, 'parent_init') and c.parent_init is True, "Parent init was not
 print("Correct!")
 > Expected Output: Correct!
 
-## Question 5: Private Variables
+## Question 9: Private Variables
 Define a class `Secret` with an attribute `_key` set to "hidden" inside `__init__`. Use the single underscore convention.
 
 > Type: code
@@ -90,7 +126,7 @@ assert s._key == "hidden", f"Expected '_key' to be 'hidden', got '{s._key}'"
 print("Correct!")
 > Expected Output: Correct!
 
-## Question 6: Class Method Implementation
+## Question 10: Class Method Implementation
 Write a class named `Greeter` with a method `greet(name)` that returns "Hello, [name]!".
 
 > Type: code

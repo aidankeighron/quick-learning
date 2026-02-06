@@ -5,7 +5,25 @@ order: 3
 difficulty: "Intermediate"
 ---
 
-## Question 1: The 'with' Statement
+## Question 1: Purpose of Context Managers
+What is the primary purpose of a context manager in Python?
+
+> Type: multiple-choice
+- [ ] To manage memory manually
+- [x] To setup and teardown resources automatically
+- [ ] To create global variables
+- [ ] To speed up code execution
+
+## Question 2: The With Keyword
+Which keyword activates a context manager?
+
+> Type: multiple-choice
+- [ ] use
+- [x] with
+- [ ] using
+- [ ] context
+
+## Question 3: The 'with' Statement
 Use the `with` statement to manage corresponding resource `ResourceManager()`. The variable name should be `m`.
 
 > Type: code
@@ -37,7 +55,7 @@ assert called_enter and called_exit, "Context manager methods were not triggered
 print("Correct!")
 > Expected Output: Correct!
 
-## Question 2: Implementing __enter__
+## Question 4: Implementing __enter__
 Complete the `Action` class so that `__enter__` returns the string "Action Started".
 
 > Type: code
@@ -54,7 +72,25 @@ with Action() as a:
 print("Correct!")
 > Expected Output: Correct!
 
-## Question 3: Implementing __exit__
+## Question 5: Context Manager Protocol
+Which two magic methods are required to create a class-based context manager?
+
+> Type: multiple-choice
+- [ ] `__init__` and `__del__`
+- [ ] `__start__` and `__finish__`
+- [x] `__enter__` and `__exit__`
+- [ ] `__open__` and `__close__`
+
+## Question 6: Using contextlib
+What decorator from the `contextlib` module can convert a generator into a context manager?
+
+> Type: multiple-choice
+- [ ] `@generator`
+- [x] `@contextmanager`
+- [ ] `@context`
+- [ ] `@resource`
+
+## Question 7: Implementing __exit__
 Complete the `__exit__` method to print "Exiting" when the block ends.
 
 > Type: code
@@ -80,7 +116,7 @@ assert "Exiting" in output, f"Expected output to contain 'Exiting', got: '{outpu
 print("Correct!")
 > Expected Output: Correct!
 
-## Question 4: Suppressing Exceptions
+## Question 8: Suppressing Exceptions
 Modify `__exit__` to return `True`, which will suppress any exception raised inside the `with` block.
 
 > Type: code
@@ -100,7 +136,7 @@ except ValueError:
     raise AssertionError("Exception was not suppressed (did you return True in __exit__?)")
 > Expected Output: Correct!
 
-## Question 5: contextlib Decorator
+## Question 9: contextlib Decorator
 Use `@contextmanager` from `contextlib` to create a context manager named `simple_cm` that yields "Hello".
 
 > Type: code
@@ -117,7 +153,7 @@ with simple_cm() as msg:
 print("Correct!")
 > Expected Output: Correct!
 
-## Question 6: File Opening Pattern
+## Question 10: File Opening Pattern
 Write a `with` statement to open a file named "test.txt" in write mode (`"w"`) as `f`, and write "content" to it.
 
 > Type: code
@@ -143,4 +179,4 @@ if os.path.exists("test.txt"):
         os.remove("test.txt") # Clean up
 else:
     raise AssertionError("File 'test.txt' was not found.")
-> Expected Output: Correct! 
+> Expected Output: Correct!

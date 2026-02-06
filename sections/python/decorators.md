@@ -5,7 +5,25 @@ order: 2
 difficulty: "Intermediate"
 ---
 
-## Question 1: Decorator Syntax
+## Question 1: What is a Decorator?
+In Python, what is a decorator?
+
+> Type: multiple-choice
+- [ ] A function that returns a boolean value
+- [x] A design pattern that allows a user to add new functionality to an existing object without modifying its structure
+- [ ] A class that inherits from another class
+- [ ] A method to decorate strings for printing
+
+## Question 2: Decorator Syntax
+Which symbol is used to apply a decorator to a function in Python?
+
+> Type: multiple-choice
+- [ ] #
+- [ ] &
+- [x] @
+- [ ] $
+
+## Question 3: Decorator Syntax
 Use the correct syntax to apply the `my_decorator` to the `hello` function.
 
 > Type: code
@@ -24,7 +42,7 @@ assert hello.__name__ == "wrapper" or hello.__qualname__.endswith("wrapper"), "F
 print("Correct!")
 > Expected Output: Correct!
 
-## Question 2: Creating a Decorator
+## Question 4: Creating a Decorator
 Write a decorator `simple_dec` that takes a function, and returns a `wrapper` function (which just calls the original function).
 
 > Type: code
@@ -42,7 +60,25 @@ assert val == "ok", f"Expected 'ok', got '{val}'"
 print("Correct!")
 > Expected Output: Correct!
 
-## Question 3: Preserving Metadata
+## Question 5: Execution Order
+When using multiple decorators on a single function, in what order are they applied?
+
+> Type: multiple-choice
+- [ ] Top to bottom
+- [x] Bottom to top (Inner to Outer)
+- [ ] Random order
+- [ ] Alphabetical order
+
+## Question 6: Decorating with Arguments
+If you are decorating a function that accepts arguments, what must your wrapper function do?
+
+> Type: multiple-choice
+- [ ] It cannot accept arguments
+- [x] It should accept *args and **kwargs (or specific args) and pass them to the original function
+- [ ] It must delete the arguments
+- [ ] It must return None
+
+## Question 7: Preserving Metadata
 Use `@functools.wraps` inside `my_dec` so that the decorated function retains its original name `test_func`.
 
 > Type: code
@@ -66,7 +102,7 @@ assert test_func.__name__ == "test_func", f"Expected function name 'test_func', 
 print("Correct!")
 > Expected Output: Correct!
 
-## Question 4: Chaining Decorators
+## Question 8: Chaining Decorators
 Apply both `dec1` and `dec2` to `greet`. `dec1` should run *outside* (first applied, last executed) and `dec2` *inside*.
 
 > Type: code
@@ -85,7 +121,7 @@ assert val == "12Hello", f"Expected '12Hello', got '{val}'"
 print("Correct!")
 > Expected Output: Correct!
 
-## Question 5: Handling Arguments
+## Question 9: Handling Arguments
 Update the wrapper to accept any positional arguments (`*args`) and pass them to `func`.
 
 > Type: code
@@ -106,7 +142,7 @@ except TypeError as e:
     raise AssertionError(f"TypeError caught: {e}. Did you pass *args?")
 > Expected Output: Correct!
 
-## Question 6: Simple Logger
+## Question 10: Simple Logger
 Write a decorator `log_execution` that prints "Executing" before running the function.
 
 > Type: code
