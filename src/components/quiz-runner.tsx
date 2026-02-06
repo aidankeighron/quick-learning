@@ -45,8 +45,8 @@ export function QuizRunner({ quiz }: QuizRunnerProps) {
     if (currentQuestion.type === "code") {
         if (!codeOutput) return;
         
-        let actual = codeOutput.trim();
-        let expected = (currentQuestion.expectedOutput || "").trim();
+        const actual = codeOutput.trim();
+        const expected = (currentQuestion.expectedOutput || "").trim();
         
         if (currentQuestion.language === "sql") {
              // For SQL, we look for [SUCCESS] or [ERROR]

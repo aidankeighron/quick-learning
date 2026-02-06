@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getSections } from "@/lib/content";
 import Link from "next/link";
 import {

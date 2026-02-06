@@ -125,8 +125,8 @@ export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, 
       setWasmerInitializing(true);
       try {
           // Dynamic import to avoid SSR issues and heavy bundle on load
-        //   const { Wasmer, init, runWasix } = await import("@wasmer/sdk");
-        //   await init();
+          const { Wasmer, init, runWasix } = await import("@wasmer/sdk");
+          await init();
           setWasmerReady(true);
       } catch (e: any) {
           setError("Failed to initialize C/C++ Runtime: " + e.message);
