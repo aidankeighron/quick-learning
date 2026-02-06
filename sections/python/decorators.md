@@ -59,8 +59,22 @@ How do you handle arbitrary arguments in a wrapper function?
 > Explanation: `*args` and `**kwargs` allow the wrapper to accept any signature.
 
 ## Question 6: Simple Logger
-Write a decorator `log_execution` (conceptually) that prints "Executing" before running the function. For this test, just define a function `hello` that prints "Hello" and call it.
+Write a decorator `log_execution` that prints "Executing" before running the function.
 
 > Type: code
 > Language: python
-> Expected Output: Hello
+> Starting Code:
+def log_execution(func):
+    def wrapper():
+        # Print "Executing" here
+        func()
+    return wrapper
+> Verification Code:
+@log_execution
+def hello():
+    print("Hello")
+
+hello()
+> Expected Output:
+Executing
+Hello

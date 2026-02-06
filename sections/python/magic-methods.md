@@ -63,4 +63,11 @@ Create a class `Person` that accepts a `name` in `__init__` and returns that nam
 
 > Type: code
 > Language: python
+> Starting Code:
+class Person:
+    def __init__(self, name):
+        pass
+> Verification Code:
+p = Person("Alice")
+print(str(p))
 > Expected Output: Alice

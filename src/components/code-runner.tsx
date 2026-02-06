@@ -14,17 +14,19 @@ import { cn } from "@/lib/utils";
 
 type CodeRunnerProps = {
   language: "javascript" | "python" | "sql";
+  initialCode?: string;
+  hiddenSuffixCode?: string;
   onOutput: (output: string) => void;
   className?: string;
 };
 
-export function CodeRunner({ language, onOutput, className }: CodeRunnerProps) {
+export function CodeRunner({ language, initialCode, hiddenSuffixCode, onOutput, className }: CodeRunnerProps) {
   const [code, setCode] = useState(
-    language === "javascript" 
+    initialCode || (language === "javascript" 
       ? "console.log('Hello World');" 
       : language === "python" 
       ? "print('Hello World')" 
-      : "SELECT * FROM users;"
+      : "SELECT * FROM users;")
   );
   
   const [output, setOutput] = useState("");
@@ -37,6 +39,8 @@ export function CodeRunner({ language, onOutput, className }: CodeRunnerProps) {
     setIsLoading(true);
     let result = "";
 
+    const codeToRun = code + (hiddenSuffixCode ? "\n" + hiddenSuffixCode : "");
+
     try {
       if (language === "javascript") {
         // Capture console.log
@@ -48,7 +52,7 @@ export function CodeRunner({ language, onOutput, className }: CodeRunnerProps) {
 
         try {
           // eslint-disable-next-line no-new-func
-          new Function(code)();
+          new Function(codeToRun)();
         } catch (e: any) {
           throw e;
         } finally {
@@ -65,7 +69,7 @@ export function CodeRunner({ language, onOutput, className }: CodeRunnerProps) {
             // Capture stdout
             pyodide.setStdout({ batched: (msg: string) => { result += msg + "\n"; } });
             
-            await pyodide.runPythonAsync(code);
+            await pyodide.runPythonAsync(codeToRun);
             // Result is accumulated in 'result' via stdout callback
         } catch (e: any) {
             throw e;
@@ -143,7 +147,7 @@ def run_sql(query):
     finally:
         con.close()
 
-run_sql("""${code.replace(/"/g, '\\"')}""")
+run_sql("""${codeToRun.replace(/"/g, '\\"')}""")
 `;
             
             await pyodide.runPythonAsync(seedScript);

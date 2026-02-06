@@ -167,8 +167,11 @@ export function QuizRunner({ quiz }: QuizRunnerProps) {
             <CardContent className="space-y-4">
               {currentQuestion.type === "code" ? (
                  <div className="space-y-4">
-                    <CodeRunner 
+                    <CodeRunner
+                       key={currentQuestionIndex /* Force reset on question change */}
                        language={currentQuestion.language || "javascript"} 
+                       initialCode={currentQuestion.startingCode}
+                       hiddenSuffixCode={currentQuestion.verificationCode}
                        onOutput={onCodeOutputChange} 
                     />
                  </div>

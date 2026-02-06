@@ -59,8 +59,15 @@ How do you loosely define a "private" variable in Python?
 > Explanation: A single underscore `_` is a convention for internal use. Double underscores `__` trigger name mangling.
 
 ## Question 6: Class Method Implementation
-Write a class named `Greeter` with a method `greet` that returns "Hello, [name]!".
+Write a class named `Greeter` with a method `greet(name)` that returns "Hello, [name]!".
 
 > Type: code
 > Language: python
+> Starting Code:
+class Greeter:
+    def greet(self, name):
+        pass
+> Verification Code:
+g = Greeter()
+print(g.greet("Python"))
 > Expected Output: Hello, Python!
